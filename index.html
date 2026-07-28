@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kennis op Peil · beeldbank Land- en Watermanagement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B2027; --deep:#143C4B; --steel:#41616E;
+  --mist:#D6E0E0; --paper:#FCFCFA; --line:#B9C7C7;
+  --kwel:#0F7F63; --peil:#E2622B; --silt:#9C8656;
+  --r:2px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--mist); color:var(--ink);
+  font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque","Public Sans",sans-serif;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.08}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- header ---------- */
+header{
+  background:var(--ink); color:var(--paper);
+  padding:22px 24px 0; position:relative; overflow:hidden;
+}
+.hwrap{max-width:1320px;margin:0 auto;position:relative;z-index:2}
+.brand{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.brand h1{font-size:clamp(26px,4.2vw,42px);color:var(--paper)}
+.brand h1 em{font-style:normal;color:var(--peil)}
+.brand p{margin:0;font-size:13px;color:#9FB6BB;max-width:46ch}
+.waterline{height:34px;margin-top:16px;display:block;width:100%}
+.tabs{display:flex;gap:2px;position:relative;z-index:3;margin-top:-1px}
+.tab{
+  background:transparent;border:0;border-bottom:3px solid transparent;
+  padding:11px 18px 10px;font-size:13px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--steel);
+}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--peil)}
+.tabbar{background:var(--mist);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.tabbar .hwrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:0 24px}
+.count{font-size:12px;color:var(--steel);margin-left:auto}
+
+/* ---------- layout ---------- */
+.shell{max-width:1320px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:246px 1fr;gap:34px;align-items:start}
+@media(max-width:900px){.shell{grid-template-columns:1fr;gap:0}}
+
+/* ---------- rail ---------- */
+.rail{position:sticky;top:56px;padding:26px 0 40px}
+@media(max-width:900px){.rail{position:static;padding-bottom:8px}}
+.rail h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);font-weight:700;margin:0 0 10px;font-family:"Public Sans",sans-serif}
+.rail section{margin-bottom:26px}
+.srch{width:100%;padding:9px 11px;border:1.5px solid var(--ink);background:var(--paper);border-radius:var(--r);font-size:14px}
+.srch:focus{outline:2px solid var(--peil);outline-offset:1px}
+.thm{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;padding:5px 6px;text-align:left;border-radius:var(--r)}
+.thm:hover{background:#C7D4D4}
+.thm[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.thm .no{font-size:11px;font-weight:600;opacity:.65;width:26px}
+.thm .nm{flex:1;font-size:13.5px}
+.thm .ct{font-size:11px;opacity:.6}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{border:1.5px solid var(--line);background:var(--paper);border-radius:99px;padding:4px 11px;font-size:12px}
+.chip[aria-pressed="true"]{background:var(--kwel);border-color:var(--kwel);color:#fff}
+.reset{font-size:12px;color:var(--steel);background:none;border:0;padding:0;text-decoration:underline}
+
+/* ---------- peilschaal (signature) ---------- */
+.gauge{display:inline-flex;gap:2px;vertical-align:middle}
+.gauge i{width:7px;height:15px;background:#C2CFCF;border-radius:1px;display:block}
+.gauge i.on{background:var(--deep)}
+.gauge.hi i.on{background:var(--kwel)}
+.gauge.nil i{background:repeating-linear-gradient(45deg,#C2CFCF,#C2CFCF 2px,transparent 2px,transparent 4px)}
+
+/* ---------- fragments ---------- */
+main{padding:26px 0 0;min-width:0}
+.group{margin-bottom:40px}
+.ghead{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:7px;margin-bottom:14px}
+.ghead .gno{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--peil)}
+.ghead h2{font-size:23px}
+.ghead .gct{margin-left:auto;font-size:12px;color:var(--steel)}
+.frag{
+  display:grid;grid-template-columns:104px 1fr auto;gap:16px;align-items:start;
+  background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--line);
+  padding:12px 14px;margin-bottom:7px;border-radius:var(--r);
+}
+.frag.star{border-left-color:var(--peil)}
+.frag:hover{border-color:var(--steel);border-left-color:var(--peil)}
+.frag .tc{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;padding-top:1px}
+.frag .tc a{color:var(--kwel);text-decoration:none;border-bottom:1.5px solid #A9D3C7}
+.frag .tc a:hover{border-bottom-color:var(--kwel)}
+.frag .tc small{display:block;font-family:"Public Sans",sans-serif;font-weight:400;font-size:11px;color:var(--steel);letter-spacing:.02em}
+.frag .body p{margin:0 0 4px;font-size:14px}
+.frag .src{font-size:12px;color:var(--steel)}
+.frag .src b{font-weight:600;color:var(--deep)}
+.frag .src button{background:none;border:0;padding:0;text-decoration:underline;color:var(--steel);font-size:12px}
+.star-tag{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--peil);white-space:nowrap;padding-top:3px}
+.empty{background:var(--paper);border:1px dashed var(--line);padding:28px;text-align:center;color:var(--steel);font-size:14px}
+
+/* ---------- doc cards ---------- */
+.docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 12px;text-align:left;width:100%;display:flex;flex-direction:column;gap:10px}
+.card:hover{border-color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.card h3{font-size:17px;line-height:1.2}
+.card .meta{font-size:11.5px;color:var(--steel);letter-spacing:.03em;text-transform:uppercase;font-weight:600}
+.profile{display:flex;align-items:flex-end;gap:3px;height:38px;border-bottom:1px solid var(--line);padding-bottom:0}
+.profile span{flex:1;background:var(--deep);border-radius:1px 1px 0 0;min-height:2px}
+.profile span.z{background:#D3DDDD}
+.profile span.top{background:var(--kwel)}
+.card .verdict{font-size:12px;color:var(--steel);display:flex;align-items:center;gap:8px;margin-top:auto}
+
+/* ---------- overlay ---------- */
+.ov{position:fixed;inset:0;background:rgba(11,32,39,.72);z-index:100;display:none;overflow-y:auto;padding:0}
+.ov.open{display:block}
+.sheet{background:var(--mist);max-width:920px;margin:0 auto;min-height:100%;padding:0 0 70px}
+.sheet .top{background:var(--ink);color:var(--paper);padding:24px 30px;position:sticky;top:0;z-index:5}
+.sheet .top h2{font-size:clamp(22px,3.4vw,32px);color:var(--paper);max-width:26ch}
+.sheet .top .meta{font-size:12px;color:#9FB6BB;margin-top:8px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.close{position:absolute;top:20px;right:24px;background:none;border:1.5px solid #41616E;color:var(--paper);border-radius:99px;width:34px;height:34px;font-size:17px;line-height:1}
+.close:hover{background:var(--peil);border-color:var(--peil)}
+.sheet .in{padding:26px 30px}
+.watch{display:inline-block;background:var(--peil);color:#fff;text-decoration:none;padding:9px 18px;font-weight:700;font-size:14px;border-radius:var(--r)}
+.watch:hover{background:var(--ink)}
+.note{background:#F6E9DF;border-left:3px solid var(--peil);padding:10px 13px;font-size:13px;margin:14px 0}
+.sheet h4{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);font-family:"Public Sans",sans-serif;font-weight:700;margin:30px 0 10px;border-bottom:1px solid var(--line);padding-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr td:first-child{width:30%;font-weight:600}
+tr.off{color:var(--steel)}
+td .tcs{font-family:"IBM Plex Mono",monospace;font-size:12.5px;display:block}
+td .tcs a{color:var(--kwel);text-decoration:none;border-bottom:1px solid #A9D3C7}
+.motiv{background:var(--paper);border:1px solid var(--line);padding:16px;font-size:14px;border-radius:var(--r)}
+.shell.wide{grid-template-columns:1fr}
+.shell.wide .rail{display:none}
+.uitleg{max-width:66ch;padding:34px 0 20px}
+.uitleg h2{font-size:clamp(26px,4vw,38px);margin-bottom:6px}
+.uitleg .lead{font-size:18px;line-height:1.5;color:var(--deep);margin:0 0 30px}
+.uitleg h3{font-size:19px;margin:34px 0 8px}
+.uitleg p{margin:0 0 14px}
+.uitleg ol{padding-left:20px;margin:0 0 14px}
+.uitleg li{margin-bottom:7px}
+.uitleg .kader{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--kwel);padding:16px 18px;border-radius:var(--r);margin:22px 0}
+.uitleg .kader.let{border-left-color:var(--peil)}
+.uitleg .kader h3{margin:0 0 6px;font-size:17px}
+.uitleg .kader p:last-child{margin-bottom:0}
+.uitleg .slot{font-size:19px;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;color:var(--kwel);margin-top:34px}
+.themalijst{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:4px 16px;margin:12px 0 4px;padding:0;list-style:none}
+.themalijst li{font-size:14px;display:flex;gap:8px}
+.themalijst b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--peil);font-weight:600;padding-top:2px}
+footer{border-top:1px solid var(--line);margin-top:20px;padding:26px 24px 60px;font-size:12.5px;color:var(--steel);max-width:1320px;margin-left:auto;margin-right:auto}
+footer b{color:var(--ink)}
+:focus-visible{outline:2px solid var(--peil);outline-offset:2px}
+@media(prefers-reduced-motion:no-preference){.frag,.card{transition:border-color .12s,box-shadow .12s}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div class="brand">
+      <h1>Kennis op <em>Peil</em></h1>
+      <p>Beeldbank Land- en Watermanagement · Kennisleerlijn 6 · Scalda Groen</p>
+    </div>
+  </div>
+  <svg class="waterline" viewBox="0 0 1200 34" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 26 Q 60 14 120 22 T 240 22 T 360 20 T 480 24 T 600 20 T 720 24 T 840 20 T 960 24 T 1080 20 T 1200 23 L1200 34 L0 34Z" fill="#D6E0E0"/>
+    <path d="M0 26 Q 60 14 120 22 T 240 22 T 360 20 T 480 24 T 600 20 T 720 24 T 840 20 T 960 24 T 1080 20 T 1200 23" fill="none" stroke="#E2622B" stroke-width="1.5"/>
+  </svg>
+</header>
+
+<div class="tabbar">
+  <div class="hwrap">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-view="frag">Fragmenten</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="doc">Documentaires</button>
+      <button class="tab" role="tab" aria-selected="false" data-view="info">Uitleg</button>
+    </div>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<div class="shell">
+  <aside class="rail">
+    <section>
+      <h3>Zoeken</h3>
+      <input class="srch" id="q" type="search" placeholder="bijv. kwel, no-till, overstort">
+    </section>
+    <section>
+      <h3>Onderwerp</h3>
+      <div id="themes"></div>
+    </section>
+    <section>
+      <h3>Lengte van de film</h3>
+      <div class="chips" id="durs"></div>
+    </section>
+    <section>
+      <h3>Gebied</h3>
+      <div class="chips" id="ctxs"></div>
+    </section>
+    <button class="reset" id="reset">Alle filters wissen</button>
+  </aside>
+
+  <main>
+    <div id="view"></div>
+  </main>
+</div>
+
+<footer>
+  <b>Hoe je dit gebruikt.</b> Klik op een tijdcode en de film start op dat moment. Kies eerst een onderwerp links, filter daarna op lengte als je een fragment binnen één les wilt gebruiken. Oranje gemarkeerde fragmenten zijn de aanraders per film.<br>
+  <b>Let op:</b> de peilschaal geeft aan hoe sterk een film een onderwerp behandelt, niet hoe goed de film is. Vijf balken bij 6.5 betekent: hier valt echt iets te halen over waterhuishouding.
+</footer>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Documentaire"><div class="sheet" id="sheet"></div></div>
+
+<script>
+const THEMES = {
+  1:"Flora", 2:"Fauna", 3:"Bodemvorming", 4:"Bodemkwaliteit", 5:"Waterhuishouding",
+  6:"Waterkwaliteit", 7:"Ecologie", 8:"Beheer", 9:"Omgevingswet", 10:"Nutriënten"
+};
+
+const DOCS = [
+{
+ id:"dirt", t:"DIRT – A Documentary About Saving Our Soil", dur:55, ctx:"VS", verdict:4,
+ url:"https://www.youtube.com/watch?v=A8mawEmm49o",
+ why:"Uitstekende en praktisch toepasbare documentaire. Legt een directe verbinding tussen bodembiologie, erosiepreventie en modern waterbeheer. No-till machines, precisie-irrigatie (Pipe Planner) en rotatiebegrazing komen helder in beeld via praktijklerende boeren. De Amerikaanse context en het ontbreken van Nederlandse wetgeving houden de score op vier sterren.",
+ s:{1:3,2:3,3:2,4:5,5:4,6:3,7:4,8:5,9:0,10:4},
+ k:{
+  1:{t:["16:12–16:56","30:13–32:19"],w:"Wortelsystemen (Bermudagras) tegen vertrapping en de selectie van groenbemesters: vlinderbloemigen versus granen."},
+  2:{t:["15:41–16:12","18:25–18:53"],w:"Hoe begrazing door runderen en geiten via vertrapping en speeksel de boom- en plantengroei beïnvloedt."},
+  3:{t:["00:53–01:00","20:25–20:43"],w:"Kort over het ontstaan van de dunne toplaag en de klei-/leemopbouw van de Stuttgart-bodem in Arkansas."},
+  4:{t:["19:11–20:15","26:01–28:01","46:07–47:38"],w:"Bodemaggregaten, structuurschade door ploegen, bulkdichtheid en de biologische PLFA-bodemtest."},
+  5:{t:["07:26–09:15","41:55–44:52"],w:"Drinksystemen tegen erosie rond veedrinkplaatsen en precisie-beregening via Pipe Planner-software."},
+  6:{t:["00:35–00:52","09:15–09:43"],w:"Overbegrazing en uitspoeling van bestrijdingsmiddelen en meststoffen naar grond- en oppervlaktewater."},
+  7:{t:["21:05–24:40"],w:"Het bodemvoedselweb compleet: mycorrhiza, bacteriën, aaltjes, wormen en nuttige insecten."},
+  8:{t:["11:09–14:12","24:56–26:01","29:02–30:13"],w:"No-till zaaimachines, rotatiebegrazing met schrikdraad en vruchtafwisseling in de praktijk."},
+  9:{t:[],w:"Komt niet voor. Amerikaanse film, gericht op de USDA/NRCS-praktijk."},
+  10:{t:["18:31–18:47","22:37–23:35","46:53–47:18"],w:"Stikstofbinding door rhizobiumbacteriën en de nutriëntenkringloop via wormenmest en organische stof."}
+ },
+ top:[["19:11–20:15","Visuele uitleg van mycorrhiza, wortelexudaten en bodemaggregaten."],
+      ["21:54–23:35","Concrete berekening van hoe wormen N, P en K omzetten en de bodem beluchten."],
+      ["24:56–26:01","Technische demonstratie van een no-till zaaimachine met snijschijven en luchtdruksysteem."],
+      ["29:02–31:28","Erosiebestrijding door groenbemesters en doordachte gewaskeuze per teelt."],
+      ["41:55–44:52","Pipe Planner-software voor het stansen van gaten in poly-pipes: water en energie besparen."]]
+},
+{
+ id:"livingsoil", t:"Living Soil Film", dur:58, ctx:"VS", verdict:5,
+ url:"https://www.youtube.com/watch?v=ntJouJhLM48",
+ why:"Uiterst waardevol en actueel. Laat overtuigend zien hoe bodemgezondheid, biodiversiteit en waterkwaliteit aan elkaar vastzitten. De combinatie van velddemonstraties (no-till, roller-crimper), economische onderbouwing en het beleidsvoorbeeld uit Maryland maakt er een compleet onderwijs- en discussiekader van.",
+ s:{1:4,2:3,3:2,4:5,5:4,6:5,7:5,8:5,9:0,10:5},
+ k:{
+  1:{t:["28:59–31:23","44:09–45:23"],w:"Gewasdiversiteit, wortelarchitectuur en historische teeltsystemen zoals de Drie Zusters (maïs, bonen, pompoen)."},
+  2:{t:["32:04–32:20","38:16–39:00"],w:"De rol van spinnen bij plaagbeheersing en de invloed van veebegrazing op de bodem."},
+  3:{t:["11:36–11:46","19:05–19:25"],w:"Bodemontstaan door gletsjers en de uitdaging van ophooglagen met bouwafval in stedelijk gebied."},
+  4:{t:["03:48–04:27","23:36–24:40","26:33–27:02"],w:"Organische stof, bulkdichtheid, watervasthoudend vermogen en DNA-testen voor bodemmicroben."},
+  5:{t:["24:20–24:40","35:37–35:50","46:41–46:56"],w:"Hoe no-till en vruchtafwisseling de infiltratie verbeteren en runoff verminderen, ook in droge gebieden."},
+  6:{t:["42:44–43:42","48:43–52:35","54:09–55:24"],w:"Uitspoeling van stikstof en fosfor, de impact op de Chesapeake Bay en het herstel van oesters en krabben."},
+  7:{t:["05:38–06:29","25:42–26:28","28:13–29:05"],w:"Het bodembiome, de koolstofeconomie tussen plant en rhizobia, en microbiële activiteit."},
+  8:{t:["07:36–07:57","33:51–36:16","39:07–39:49"],w:"Directzaai, rolling-crimping van groenbemesters en kostenvergoeding via overheidsprogramma's."},
+  9:{t:[],w:"Komt niet voor. Amerikaans beleid (USDA) en subsidies uit Maryland."},
+  10:{t:["05:38–06:29","14:46–15:44","50:10–50:25"],w:"Biologische stikstofbinding via de Oostenrijkse erwt en de reductie van kunstmestgebruik."}
+ },
+ top:[["05:38–06:37","De koolstofeconomie in de bodem: stikstofbinding door rhizobia in ruil voor plantensuikers."],
+      ["14:46–15:49","Economische rekensom: hoe een groenbemester de stikstofgift halveert."],
+      ["28:07–29:05","Bodemtemperatuur en de isolerende werking van een rogge-mulchlaag op het bodemleven."],
+      ["34:57–36:16","Schijfzaaimachine die zaait in gewasresten zonder de bodem te verstoren."],
+      ["48:43–52:35","Samenwerking tussen boeren, overheid en milieugroepen via de Maryland-subsidieregeling."]]
+},
+{
+ id:"kissground", t:"Kiss the Ground", dur:84, ctx:"Mondiaal", verdict:5,
+ url:"https://www.youtube.com/watch?v=1k8hHB9UnIY",
+ why:"Legt helder en visueel overtuigend de verbanden uit tussen bodembiologie, waterhuishouding, klimaatresilientie en agrarisch beheer. Met sprekende praktijkvoorbeelden en casussen als het Franse 4-per-1000-initiatief en het Chinese Loess-plateau.",
+ s:{1:4,2:4,3:3,4:5,5:5,6:3,7:5,8:5,9:0,10:5},
+ k:{
+  1:{t:["07:53–08:11","27:01–27:24","43:35–44:05"],w:"Fotosynthese en wortelexudaten, plus de kracht van een groenbemestermengsel met 19 soorten."},
+  2:{t:["44:13–45:05","47:20–50:13"],w:"Begrazing door runderen, de vergelijking met historische bisonkuddes en Allan Savory's holistic planned grazing."},
+  3:{t:["03:29–04:38","41:36–41:53"],w:"Bodemerosie van de bronstijd tot de Dust Bowl, en opbouw van toplaag via no-till drills."},
+  4:{t:["08:24–08:43","18:49–19:00","42:50–43:09"],w:"Vorming van bodemaggregaten (carbon glue), verlies van een derde van de toplaag, verhoging organische stof."},
+  5:{t:["21:04–22:35","42:19–42:43","1:00:21–1:02:42"],w:"Kleine waterkringlopen, infiltratie versus runoff bij bedekte bodems, compost als spons in de stad."},
+  6:{t:["16:19–16:40","1:04:32–1:05:55"],w:"Uitspoeling van glyfosaat naar drinkwater en bronbescherming via thermofiele compostering."},
+  7:{t:["09:17–10:33","20:18–22:42","1:13:25–1:15:32"],w:"Het bodembiome, verwoestijning en de grootschalige herstelcasus van het Loess-plateau."},
+  8:{t:["05:52–06:20","41:25–42:19","51:54–55:13"],w:"Minder grondbewerking, begrazingsplannen met grazing control charts en agroforestry."},
+  9:{t:[],w:"Komt niet voor. Amerikaans en mondiaal beleid (USDA, 4‰-initiatief)."},
+  10:{t:["08:16–08:33","13:07–13:56","31:26–34:14"],w:"Microbiële nutriëntenuitwisseling, synthetische stikstof (Haber-Bosch) en het 4-per-1000-initiatief."}
+ },
+ top:[["08:05–08:51","Geanimeerde uitleg: planten voeden bodemmicroben met koolstofsuikers en leggen zo koolstof vast."],
+      ["26:00–27:34","NASA-model toont de correlatie tussen voorjaarsploegen en wereldwijde CO₂-pieken."],
+      ["41:25–42:43","No-till drill in actie plus de impact van bodembedekking op waterinfiltratie."],
+      ["47:20–50:13","Allan Savory over begrazing inzetten om verwoestijning om te keren."],
+      ["1:13:25–1:15:32","Herstel van het gedegradeerde Loess-plateau in China, een gebied zo groot als België."]]
+},
+{
+ id:"blf-podcast", t:"The Biggest Little Farm – interview met John & Molly Chester", dur:139, ctx:"VS", verdict:5,
+ url:"https://www.youtube.com/watch?v=dRBoXE3pw80",
+ why:"Een diepgaand interview, geen film, maar met ongeëvenaarde vakinhoudelijke verdieping. Opbouw van organische stof, het sponseffect voor waterretentie en grondwateraanvulling, bodembiologie, nutriëntenkringlopen en natuurlijke plaagbeheersing komen uitgebreid aan bod. Sterk als verdiepingsmateriaal of docentachtergrond.",
+ s:{1:4,2:5,3:4,4:5,5:5,6:2,7:5,8:5,9:0,10:5},
+ k:{
+  1:{t:["43:12–44:11","45:36–45:53"],w:"Bedekkingsgewassen, leguminosen en grassen, en hoe zogenaamd onkruid als postelein mineralen ophaalt."},
+  2:{t:["1:01:40–1:03:39","1:04:41–1:05:00"],w:"De rol van herkauwers, eenden en kippen in het bodemecosysteem."},
+  3:{t:["43:21–43:45","1:01:00–1:01:16"],w:"Hoe fotosynthese organische suikers de grond in pompt en zo micro-organismen en humus opbouwt."},
+  4:{t:["44:11–44:40","56:35–59:25"],w:"Organische stof, het sponseffect, wormencompost en het bodemmicrobioom."},
+  5:{t:["44:25–45:29","1:21:12–1:22:25"],w:"1% meer organische stof houdt tot 25.000 gallon water per acre vast en helpt aquifers herladen."},
+  6:{t:["38:50–39:00","45:00–45:22"],w:"Afstromend sediment bij de buren versus de gesloten waterkringloop op het eigen bedrijf."},
+  7:{t:["15:21–16:25","46:02–47:06","50:20–51:30"],w:"Biologisch evenwicht en de predator-prooidynamiek tussen lieveheersbeestjes, luizen en mieren."},
+  8:{t:["27:07–28:20","34:32–35:13","40:47–41:30"],w:"Regeneratieve landbouw, biologisch-dynamisch beheer en keuzes zonder chemie."},
+  9:{t:[],w:"Komt niet voor."},
+  10:{t:["35:22–36:30","45:45–46:02","57:19–59:11"],w:"Nutriëntdichtheid van gewassen, kaliumopname via kruiden, stikstof uit pluimveemest, bladbemesting met compostthee."}
+ },
+ top:[["43:12–45:29","Cover crops en organische stof: wat 1% stijging betekent voor koolstof én waterberging."],
+      ["46:02–47:06","Herstel van habitat leidt tot natuurlijk plaagbeheer: mieren, bladluizen en lieveheersbeestjes."],
+      ["56:35–59:25","Vermicompostering en het brouwen van compostthee als bladbemesting."],
+      ["1:01:40–1:03:39","Symbiose tussen herkauwers en bodem: fermentatie en begrazingsstress stimuleren wortels en bodemleven."],
+      ["1:21:12–1:22:25","Cijfers: 10 tot 35% waterbesparing ten opzichte van de toegewezen hoeveelheid."]]
+},
+{
+ id:"blf-return", t:"The Biggest Little Farm – Apricot Lane Farms: 10 Years of Regeneration", dur:28, ctx:"VS", verdict:5,
+ url:"https://www.youtube.com/watch?v=T9qDMOyRYro",
+ why:"Een van de meest inspirerende en visueel overtuigende praktijkvoorbeelden van regeneratieve landbouw, bodemherstel en ecologische plaagbeheersing. Laat aanschouwelijk zien hoe principes uit de natuur — voedselwebben, kringlopen, microbiologie — concreet toepasbaar zijn in het bedrijfsbeheer, zonder chemische bestrijdingsmiddelen of kunstmest. Aanrader voor de modules bodem en ecologie.",
+ s:{1:4,2:5,3:3,4:5,5:3,6:2,7:5,8:5,9:1,10:4},
+ k:{
+  1:{t:["01:52–02:18","03:53–04:01","07:21–07:30"],w:"Groenbemesters, meerjarige boomgaarden met ruim 160 gewassen en akkerranden met inheemse beplanting voor bestuivers."},
+  2:{t:["03:29–03:45","06:15–06:46","06:58–07:21"],w:"Biologische plaagbestrijding door sleutelsoorten: haviken tegen spreeuwen, roofvogels en slangen tegen woelratten, eenden tegen slakken."},
+  3:{t:["02:52–03:00","04:01–04:18"],w:"De transformatie van een dode, verdichte industriële citroenbodem naar een levend organisch bodemprofiel."},
+  4:{t:["02:52–03:13","04:01–04:45","08:25–08:41"],w:"Bodemregeneratie, microbiologie, organische stof, compostering en de relatie tussen bodemgezondheid en voedingsdichtheid."},
+  5:{t:["05:51–05:59","26:31–27:02"],w:"De weerbaarheid van een regeneratief bodemsysteem tegen extreme droogte, storm en bosbrand, en de rol van waterretentie."},
+  6:{t:["05:28–05:36"],w:"Kort over eutrofiëring van erfvijvers door een te grote eendenpopulatie."},
+  7:{t:["03:13–03:29","06:07–07:39","27:43–28:09"],w:"Ecosysteemdynamiek, functionele agrobiodiversiteit, successie en biologisch evenwicht."},
+  8:{t:["03:45–04:18","06:22–06:36","07:21–07:39"],w:"Geïntegreerd bedrijfsbeheer: roterende begrazing met schapen, kuddebewakingshonden en compostbeheer."},
+  9:{t:["12:04–12:19"],w:"Kort over de economische en wettelijke realiteit van agrarisch ondernemerschap."},
+  10:{t:["03:45–03:53","07:08–07:30"],w:"Plagen omzetten in stikstofrijke eendenmest en de kringloop van dierlijke mest naar bodemvruchtbaarheid."}
+ },
+ top:[["02:52–04:45","Een uitgeputte industriële bodem nieuw leven inblazen met compost, groenbemesters en een maximale variatie aan dierlijke mest."],
+      ["05:21–07:39","Biologische balans in de praktijk: spreeuwen, woelratten en slakken opgelost door natuurlijke vijanden aan te trekken."],
+      ["08:18–08:41","De koppeling tussen bodemregeneratie, micro-organismen en de voedingswaarde en smaak van het gewas."],
+      ["26:31–27:17","Reflectie: een uitgeputte bodem herstelt binnen acht jaar sneller dan gedacht, als je veerkracht de ruimte geeft."]]
+},
+{
+ id:"woodwide", t:"How Trees Talk to Each Other – The Wood Wide Web", dur:7, ctx:"Mondiaal", verdict:4,
+ url:"https://www.youtube.com/watch?v=ifpVfRaK_pI",
+ why:"Compacte introductie op bos- en natuurbeheer. Suzanne Simard legt sterk uit hoe mycorrhizanetwerken en oude moederbomen bepalend zijn voor bosresilientie, nutriëntenuitwisseling, koolstofopslag en verjonging. Zeven minuten: ideaal als opening of discussiestarter.",
+ s:{1:4,2:2,3:2,4:3,5:2,6:0,7:5,8:5,9:0,10:4},
+ k:{
+  1:{t:["02:38–03:25","05:41–06:17"],w:"Natuurlijke verjonging van zaailingen onder oude bomen en hogere overleving bij migratie van soorten."},
+  2:{t:["03:15–03:25"],w:"Oude bomen als leefgebied en structuurdrager voor allerlei organismen."},
+  3:{t:["01:37–01:56"],w:"De enorme dichtheid aan schimmeldraden per volume bodem."},
+  4:{t:["01:37–02:09","06:01–06:08"],w:"Hoe bodemschimmels de structuur doorweven en bijdragen aan stabiele koolstofopslag."},
+  5:{t:["02:44–02:54","03:50–03:57"],w:"Uitwisseling van water via het netwerk en het belang daarvan bij toenemende droogte."},
+  6:{t:[],w:"Komt niet voor."},
+  7:{t:["01:08–02:37","03:09–03:25"],w:"Kern: het mycorrhizanetwerk, hub-bomen, biodiversiteit en veerkracht van het bos."},
+  8:{t:["03:58–04:38","05:41–06:31"],w:"Het Mother Tree Project, het behouden van boomclusters en geïntegreerde bosbouw."},
+  9:{t:[],w:"Komt niet voor. Canadees onderzoek en inheemse kennis."},
+  10:{t:["01:57–02:09","02:44–02:54"],w:"Hoe schimmeldraden voeding opnemen en oude bomen koolstof en nutriënten doorgeven aan zaailingen."}
+ },
+ top:[["01:08–02:37","Het Wood Wide Web: hoe schimmelnetwerken bomen verbinden en voeding transporteren."],
+      ["02:38–03:25","De ecologische rol van oude bomen als hub voor koolstof, biodiversiteit en zaailingen."],
+      ["03:40–04:38","Wat gebeurt er als we oude bomen kappen? Het klinknagelmodel toegepast op bosbeheer."],
+      ["05:41–06:31","Groepen bomen laten staan verhoogt de overleving van zaailingen met 20 tot 30%."]]
+},
+{
+ id:"freshwater", t:"Our Planet – Fresh Water", dur:48, ctx:"Mondiaal", verdict:4,
+ url:"https://www.youtube.com/watch?v=R2DU85qLfJQ",
+ why:"Visueel verbluffend en inhoudelijk sterk over de mondiale zoetwaterkringloop. Uitstekende casussen over de impact van menselijk handelen: dammenbouw, wateronttrekking voor landbouw en verdroging. De nadruk ligt regelmatig op fauna, maar de hydrologische fragmenten zijn uitstekend bruikbaar.",
+ s:{1:3,2:5,3:2,4:2,5:5,6:4,7:5,8:4,9:0,10:3},
+ k:{
+  1:{t:["12:55–13:41","16:00–16:16","20:22–20:53"],w:"Waterplanten, evapotranspiratie door bossen en zoetwaterbegroeiing."},
+  2:{t:["10:46–12:13","21:38–27:17","34:23–36:08"],w:"Zalmtrek, jaguars en kaaimannen, cichliden en de voortplanting van de Siamese kempvis."},
+  3:{t:["14:08–14:24","33:20–33:30"],w:"Verzuurd water dat kalksteen oplost tot grotten, en riviersediment uit het Tibetaans Hoogland."},
+  4:{t:["33:20–33:30","43:52–44:24"],w:"Sedimenten die overstromingsgebieden verrijken, en olifanten die graven in zandige rivierbeddingen."},
+  5:{t:["03:00–04:24","13:53–15:27","36:08–36:32"],w:"De moesson-kettingreactie naar het Eyremeer, aquifers in Florida en de dynamiek van het Tonlé Sapmeer."},
+  6:{t:["08:36–08:54","17:41–18:04","32:07–32:25"],w:"Zuurstofopname door kolkend water, watervervuiling en gelaagdheid van diepe meren."},
+  7:{t:["09:16–10:26","20:22–21:14","38:54–42:59"],w:"Kieuwadaptaties van macrofauna, de waterkringloop van het regenwoud en droogtedruk op ecosystemen."},
+  8:{t:["11:18–11:34","37:21–37:50","46:12–46:57"],w:"Impact van stuwdammen, wateronttrekking door landbouw en kunstmatig zandbankbeheer."},
+  9:{t:[],w:"Komt niet voor. Mondiale natuurdocumentaire."},
+  10:{t:["09:16–09:24","12:55–13:04"],w:"Nutriëntenarmoede in snelle bergbeken en afzetting van voedselrijk sediment bij overstroming."}
+ },
+ top:[["03:00–04:24","Grootschalige hydrologie: moesson in het noorden vult 2000 km verderop het Eyremeer."],
+      ["13:53–15:27","Grondwater, karstgrotten en zoetwaterbronnen in kalksteen, helder in beeld."],
+      ["20:22–21:14","De biologische pomp van het Amazonewoud: transpiratie die vliegende rivieren vormt."],
+      ["36:08–37:50","Ecologische en menselijke impact van stuwdammen op vismigratie en visserij in de Mekong."],
+      ["45:09–46:57","Zandbankbeheer in gereguleerde rivieren voor de Canadese kraanvogel."]]
+},
+{
+ id:"coastal", t:"Our Planet – Coastal Seas", dur:50, ctx:"Mondiaal", verdict:4,
+ url:"https://www.youtube.com/watch?v=r9PeYPHdpNo",
+ why:"Visueel indrukwekkend en inhoudelijk ijzersterk over mariene ecologie, kustbescherming en waterkwaliteit. Laat zien hoe mangroven en zeegras werken als natuurlijke klimaatbuffers, en hoe effectief beheer en herstelmaatregelen kunnen zijn.",
+ s:{1:4,2:5,3:2,4:2,5:3,6:5,7:5,8:5,9:0,10:4},
+ k:{
+  1:{t:["04:06–05:00","08:02–08:53","20:47–22:09"],w:"Zeegrasweiden, zouttolerantie van mangroven en de groei van reuzenkelpwouden tot 50 meter."},
+  2:{t:["10:51–16:59","22:09–27:29","40:34–43:52"],w:"Haaien op koraalriffen, zee-otters in kelpwouden en jacht door miljoenen zeevogels."},
+  3:{t:["09:14–09:58","18:22–19:10"],w:"Hoe koraalpoliepen kalkskeletten opbouwen en hoe dode riffen afbrokkelen."},
+  4:{t:["04:06–04:34","08:02–08:53"],w:"Zeegras en mangroven die sediment vasthouden en koolstof vastleggen (blue carbon)."},
+  5:{t:["03:27–03:46","08:36–08:41","19:44–20:15"],w:"Getijden, kustbescherming tegen orkanen door mangroven en stormopwelling van voedingsstoffen."},
+  6:{t:["08:02–08:19","17:10–19:30","35:35–37:15"],w:"CO₂-absorptie, verzuring en opwarming van zeewater, koraalverbleking en kwallenplagen."},
+  7:{t:["09:14–10:39","16:07–17:00","24:22–27:45"],w:"Apexpredatoren, de trofische cascade met zee-egels en de veerkracht van ecosystemen."},
+  8:{t:["07:16–07:22","27:58–28:20","44:45–48:08"],w:"Beschermde zeereservaten en het herstel van visstanden via duurzaam beheer."},
+  9:{t:[],w:"Komt niet voor. Internationale natuurdocumentaire."},
+  10:{t:["03:46–04:00","17:17–17:49","19:52–20:15"],w:"Opwelling van nutriënten door zeestromingen en de symbiose tussen koraal en algen."}
+ },
+ top:[["08:02–09:07","Blue carbon: zeegras en mangroven als CO₂-vangers, kraakhelder uitgelegd."],
+      ["16:07–19:30","Opwarming, koraalverbleking en oceaanverzuring in één alarmerende casus."],
+      ["24:22–27:45","Trofische cascade: hoe zee-otters via zee-egels de kelpwouden in stand houden."],
+      ["35:35–37:15","Overbevissing leidt tot wereldwijde kwallenplagen."],
+      ["44:45–48:08","Misool/Raja Ampat: 25 keer meer haaien en 3 keer meer vis na tien jaar bescherming."]]
+},
+{
+ id:"deserts", t:"Our Planet – From Deserts to Grasslands", dur:51, ctx:"Mondiaal", verdict:4,
+ url:"https://www.youtube.com/watch?v=XmtXC_n6X6Q",
+ why:"Visueel prachtig, met waardevolle inzichten in extreme klimaatzones, hydrologie van aride gebieden en gebiedsbeheer. Sterke casussen over wadi's, verwoestijning, winderosie en natuurbescherming. De nadruk ligt sterk op fauna.",
+ s:{1:3,2:5,3:2,4:2,5:4,6:3,7:5,8:4,9:0,10:3},
+ k:{
+  1:{t:["09:16–09:46","18:23–18:53","21:17–22:24"],w:"Invloed van mist op vegetatie in Oman, de anaboom en de superbloei in Californië na een wolkbreuk."},
+  2:{t:["14:27–15:02","23:21–29:14","33:17–37:46"],w:"Herintroductie van de oryx, jachtgedrag van cheeta's en de levenscyclus van het gentiaanblauwtje."},
+  3:{t:["08:28–08:44","13:45–14:07"],w:"Verwaaiing van woestijnstof en de opbouw van de zandzee Rub al-Khali."},
+  4:{t:["03:08–03:44","31:57–32:29"],w:"De extreme droogte van de Atacama en de omzetting van prairie naar intensieve landbouwgrond."},
+  5:{t:["09:16–09:34","15:43–16:12","21:17–22:03"],w:"Droge wadi's, seizoensrivieren in Namibië, mistinval en wolkbreukdynamiek."},
+  6:{t:["08:14–08:44","10:51–11:07"],w:"Woestijnstof dat kustwateren verrijkt met mineralen, en schaarse bronnen in bergwadi's."},
+  7:{t:["08:28–08:44","33:17–37:46","42:33–45:14"],w:"De voedselketen tussen woestijn en zee, mierenparasitisme bij vlinders en de functie van hooggroeiend gras."},
+  8:{t:["14:52–15:02","29:14–29:26","32:45–33:01"],w:"Wildbeheer, herintroductieprojecten, beschermde gebieden en traditioneel weidebeheer."},
+  9:{t:[],w:"Komt niet voor. Mondiale natuurdocumentaire."},
+  10:{t:["08:28–08:44","18:47–18:53"],w:"Mineralenafzetting via woestijnstof in zee en de nutriëntenwaarde van zaaddozen."}
+ },
+ top:[["08:14–08:44","Winderosie en woestijnstof dat omringende zeeën vruchtbaar maakt."],
+      ["15:34–19:21","Afhankelijkheid van fauna van schaarse waterbronnen en droge rivierbeddingen."],
+      ["21:04–22:24","Van droog ecosysteem naar bloeiend landschap na extreme neerslag."],
+      ["32:45–37:46","Traditioneel hooilandbeheer in Hongarije en de interactie tussen gentiaan, mieren en vlinder."],
+      ["40:28–42:12","Herstel en vrijlating van het Przewalskipaard op de Mongoolse steppe."]]
+},
+{
+ id:"wildnl", t:"Europe's Lost Paradise – de wilde kant van Nederland", dur:50, ctx:"Nederland", verdict:5,
+ url:"https://www.youtube.com/watch?v=hn2XyszW9rM",
+ why:"Prachtig en zeer herkenbaar overzicht van het Nederlandse cultuur- en natuurlandschap. Alle kernbegrippen van het vakgebied komen samen: inpoldering, kust- en stormvloedbeheer, uiterwaardenbeheer en natuurbeheer met grote grazers.",
+ s:{1:3,2:5,3:3,4:3,5:5,6:2,7:5,8:5,9:0,10:3},
+ k:{
+  1:{t:["11:31–11:45","36:13–37:05"],w:"Helmgras op de duinen en heidebeheer: verbossing voorkomen met schapenbegrazing."},
+  2:{t:["03:01–04:12","08:30–11:22","45:46–48:08"],w:"Heckrunderen en konikpaarden, lepelaars, zeehonden en de terugkeer van otter en bever."},
+  3:{t:["02:04–02:32","11:31–13:26"],w:"Inpoldering van de voormalige Zuiderzeebodem en duinerosie/zandverstuiving."},
+  4:{t:["15:48–16:35","36:13–36:30"],w:"Vruchtbaarheid van polderklei voor tulpenteelt versus de schrale zandbodems van de heide."},
+  5:{t:["02:04–02:17","14:06–15:00","46:27–47:38"],w:"Polders onder zeeniveau, stormvloedkeringen en Ruimte voor de Rivier."},
+  6:{t:["01:41–01:47","31:30–32:45"],w:"Voedselrijkdom van getijdenwater in de Waddenzee en brakwatermilieus in geulen."},
+  7:{t:["02:40–03:01","25:42–26:15","46:27–48:08"],w:"Verruiging in moerasgebieden, toppredatoren en uiterwaardenecologie."},
+  8:{t:["02:45–04:12","15:30–15:48","46:27–47:38"],w:"Begrazingsbeheer met grote grazers, historische molenontwatering en uiterwaardverbreding."},
+  9:{t:[],w:"Komt niet voor. Algemene natuurdocumentaire over de Nederlandse delta."},
+  10:{t:["01:41–01:47","36:13–36:30"],w:"Nutriëntenrijkdom in de Waddenzee versus arme zandgronden op de Veluwe."}
+ },
+ top:[["02:04–04:12","Landaanwinning in Flevoland en natuurlijk beheer met grote grazers."],
+      ["11:31–15:00","De strijd tegen het water: duinerosie, 1953, de Oosterscheldekering en de Afsluitdijk."],
+      ["15:30–16:35","Polderwaterhuishouding via molens en gemalen, en het ontstaan van de tulpenteelt."],
+      ["36:13–37:46","Heidebeheer op arme zandgronden met schaapskuddes."],
+      ["46:27–48:08","De omslag in rivierbeheer na de jaren negentig: Ruimte voor de Rivier en ecologisch herstel."]]
+},
+{
+ id:"agrio", t:"Natuur houdt zich niet aan natuurbeleid (Agrio)", dur:47, ctx:"Nederland", verdict:5,
+ url:"https://www.youtube.com/watch?v=BevdvHbxbMM",
+ why:"Verfrissende en kritische blik op het Nederlandse natuurbeheer, het stikstof- en biodiversiteitsdebat en de grenzen van de maakbare natuur. Brengt veldpraktijk, theoretische ecologie en juridische werkelijkheid samen. Daagt studenten uit kritisch na te denken over papieren natuurdoelen versus een dynamisch landschap.",
+ s:{1:4,2:4,3:3,4:4,5:5,6:2,7:5,8:5,9:4,10:3},
+ k:{
+  1:{t:["01:10–02:35","13:50–15:31","28:24–30:34"],w:"Stroomdalplanten, moeraswolfsklauw in de duinen, melkviooltje en vetblad in het Kienveen."},
+  2:{t:["03:51–04:30","09:04–09:10","41:35–42:40"],w:"Terugkeer van grauwe klauwier, lepelaar, zeearend en kraanvogel versus de achteruitgang van de blauwe kiekendief."},
+  3:{t:["05:56–06:15","18:26–18:50"],w:"Komgronden met ondoorlatende keileem en leemhoudende bosbodems op Brabantse landgoederen."},
+  4:{t:["13:11–13:32","21:09–21:30","24:31–24:52"],w:"Verzuring door eikenmonocultuur, buffering met kalkrijk populierenstrooisel en historische zure regen."},
+  5:{t:["05:13–05:30","06:28–07:20","15:45–16:52","36:52–37:46"],w:"Sponswerking van veenmos, compartimentering met damwanden, stoppen van duinwaterwinning en rivierinsnijding."},
+  6:{t:["24:51–24:56","35:08–35:33"],w:"De Rijn als open riool in de jaren zeventig en eutrofiëring van duinplassen door vogelmest."},
+  7:{t:["02:46–03:25","29:46–31:45","39:23–41:18"],w:"Successie van pionierfase naar klimaxbos, dynamische natuur versus statische natuurdoelen."},
+  8:{t:["03:03–03:20","08:08–08:40","11:22–13:32","20:37–23:31"],w:"Extensieve begrazing, plaggen en chopperen, bosomvorming en niets-doen-beheer."},
+  9:{t:["25:30–26:41","38:52–39:10","41:53–43:00"],w:"EHS/NNN, Natura 2000-instandhoudingsdoelen en juridische doelen versus haalbaarheid in de praktijk."},
+  10:{t:["21:09–21:30","35:08–35:33"],w:"Eutrofiëring van duinmeren door ganzen en het effect van kalkrijk populierenblad op bosbodems."}
+ },
+ top:[["03:03–03:50","Natuurlijke rivierprocessen toelaten leidt tot een explosie aan stroomdalflora."],
+      ["05:13–07:20","Sponswerking van veenmos en het herstel van het Vragenderveen via damwanden en bufferzones."],
+      ["11:22–13:32","Plaggen en chopperen laten verdwenen pioniersoorten terugkeren."],
+      ["20:37–23:31","Kleinschalig, multifunctioneel bosbeheer op Landgoed Velder."],
+      ["28:13–31:45","Het dilemma van successie: pionierfasen zijn niet statisch vast te houden."],
+      ["41:35–43:51","Kritiek op de boekhoudkundige benadering van Natura 2000-doelen."]]
+},
+{
+ id:"marshforest", t:"Swamp Forests – de moerasbossen van Polen", dur:47, ctx:"Europa", verdict:5,
+ url:"https://www.youtube.com/watch?v=OYS6s5dGJgg",
+ why:"Diepgaand en visueel prachtig overzicht van natte boshabitats, stroomgebiedbeheer en hydrologische gradiënten. Verduidelijkt haarscherp het verschil tussen broekbos (kwelafhankelijk, stagnant) en ooibos (riviergebonden, dynamisch met slibafzetting).",
+ s:{1:5,2:5,3:3,4:3,5:5,6:3,7:5,8:5,9:3,10:3},
+ k:{
+  1:{t:["02:04–02:44","24:30–25:00","32:38–33:20"],w:"Zwarte els, bultstructuren, wollegras, vrouwenschoentje, moeraslepeltje en paardenstaart."},
+  2:{t:["06:22–07:40","09:39–11:22","25:31–26:20"],w:"Bruine kikker, kraanvogels en hun broedgedrag, Europese moerasschildpad en bevers."},
+  3:{t:["02:39–03:00","24:30–24:54","34:58–35:12"],w:"Veenvorming, humeuze komgronden, bulten-en-slenkenstructuur en sedimentatie bij overstroming."},
+  4:{t:["03:42–04:20","28:52–29:30"],w:"Droogvallen van broekbossoorten bij langdurige droogte en ijzerbacterie-aanslag."},
+  5:{t:["03:01–04:26","11:58–13:00","34:58–35:30"],w:"Dynamisch peilbeheer, waterretentie door beverdammen, voorjaarsinundatie en kwelwater."},
+  6:{t:["15:20–15:32","29:13–29:30"],w:"Natuurlijke zuivering door beverreservoirs en ijzeroxiderende bacteriën."},
+  7:{t:["01:27–01:40","15:08–15:32","46:04–46:35"],w:"Natura 2000-habitats, verbindingszones, ecosysteemingenieurs en biodiversiteit in natte natuur."},
+  8:{t:["01:27–01:40","11:58–12:30","46:35–46:42"],w:"Strikte reservaten, herstel van beverpopulaties, recreatiezonering en vlonderpaden."},
+  9:{t:["01:27–01:40","05:51–05:59","08:35–08:46"],w:"Soortenbescherming, beschermingszones rond broedvogels en Natura 2000-wetgeving."},
+  10:{t:["34:58–35:12","36:28–36:40"],w:"Aanvoer van vruchtbaar slib tijdens rivieroverstromingen in ooibossen."}
+ },
+ top:[["02:04–03:42","De bulten-en-slenkenstructuur van het elzenbroekbos en de rol van waterpeilfluctuatie."],
+      ["09:39–11:22","De kraanvogel is afhankelijk van hoog water rond het nest als bescherming tegen predatoren."],
+      ["11:58–15:32","De bever als waterbeheerder: retentie, sponswerking en versnelde waterzuivering."],
+      ["31:42–35:30","Broekbos versus ooibos: stagnant kwelwater tegenover periodieke overstroming met slib."]]
+},
+{
+ id:"secretwater", t:"The Invisible River – Extraordinary Biodiversity", dur:52, ctx:"Europa", verdict:5,
+ url:"https://www.youtube.com/watch?v=ccIfEIB2qD8",
+ why:"Visueel verbluffend en inhoudelijk uitstekend over de hydrologie van grondwatersystemen, kwelzones en rivierbeheer. Laat zien hoe bovenregionale grondwaterstromen werken, hoe kwelwater zeldzame ecosystemen voedt, en wat de schaduwzijden zijn van kanalisatie, beregening en bemesting.",
+ s:{1:3,2:5,3:3,4:3,5:5,6:5,7:5,8:5,9:0,10:4},
+ k:{
+  1:{t:["11:50–12:12","23:09–23:24","44:49–45:34"],w:"Verlandingsvegetatie, wilde gladiolen in vochtige hooilanden en de zuiverende werking van ooibossen."},
+  2:{t:["06:56–08:47","24:03–26:02","41:25–42:04"],w:"Steenkreeft, waterspreeuw, amfibieën, ringslang en beekprik als bio-indicatoren voor schoon water."},
+  3:{t:["05:37–06:00","10:26–10:53","28:39–29:21"],w:"Ontstaan van de Rijngraben, doorlatende zand- en grindlagen, kwelvorming en zandwinning."},
+  4:{t:["18:21–19:20","42:28–42:49"],w:"Belasting van het grondwater door bestrijdingsmiddelen en meststoffen, plus slibophoping."},
+  5:{t:["01:42–02:26","09:47–10:39","26:28–28:04"],w:"Freatisch water, het grootste grondwaterlichaam van Europa, kwelbronnen, beregening en droogval."},
+  6:{t:["11:50–12:04","14:24–15:13","32:29–33:07"],w:"Oligotroof kwelwater, dichtheidsgelaagdheid en zuurstofloosheid met ijzerneerslag op de bodem."},
+  7:{t:["22:44–24:03","39:56–41:20","44:49–45:34"],w:"Natte schraallanden, ooibosecosystemen, verdringing door exoten en verlanding."},
+  8:{t:["27:09–28:04","36:49–37:23","43:49–44:49"],w:"Rivierkanalisatie, zandwinplassen en het heropenen van afgesneden meanders om kwelbronnen door te spoelen."},
+  9:{t:[],w:"Komt niet voor. Duits-Franse Boven-Rijnregio."},
+  10:{t:["11:50–12:12","14:19–14:38","18:54–19:26"],w:"Nitraat- en fosfaatuitspoeling uit maïsteelt, algenbloei en eutrofiëring van nevengeulen."}
+ },
+ top:[["01:42–02:26","Kwelvlaktes en kwelbronnen: hoe bergneerslag via breuklijnen weer omhoog komt."],
+      ["14:24–15:13","Koud kwelwater onder warm rivierwater zorgt voor dichtheidsgelaagdheid."],
+      ["26:58–28:04","Beregening van maïs laat het grondwater 2 cm per dag zakken: beken vallen droog."],
+      ["32:29–33:07","Diepe zandwinputten: zuurstofloosheid, ijzerneerslag en bacteriematten op 50 meter."],
+      ["43:49–45:34","Dijken doorgraven om rivierwater weer door ooibos en oude meanders te laten stromen."]]
+},
+{
+ id:"beavers", t:"The busy beavers bringing wetlands back to the UK (WILD HOPE)", dur:28, ctx:"Europa", verdict:5,
+ url:"https://www.youtube.com/watch?v=sdkZH3uM1BI",
+ why:"Schoolvoorbeeld van de integratie tussen hydrologie, ecologie en beheer. Laat zien dat waterbeheer niet alleen civiele techniek is: ecosysteemingenieurs kunnen effectief bijdragen aan klimaatadaptatie. Behandelt ook de schaduwzijden en biedt concrete oplossingen.",
+ s:{1:3,2:5,3:2,4:3,5:5,6:3,7:5,8:5,9:3,10:2},
+ k:{
+  1:{t:["04:24–05:11","20:57–21:03"],w:"Effect van bevers op oevervegetatie: knagen aan populier, wilg, hazelaar en berk."},
+  2:{t:["09:47–10:24","22:05–22:40"],w:"De bever als keystone species, met positieve effecten op otters, woelratten, vissen, vleermuizen en watervogels."},
+  3:{t:["01:58–02:28","15:04–15:20"],w:"Ontstaan van moerasgronden en sedimentatie achter beverdammen."},
+  4:{t:["16:08–16:24","21:28–22:01"],w:"Vasthouden van bodemvocht tijdens extreme droogte."},
+  5:{t:["05:15–06:20","13:06–16:24","19:22–20:36"],w:"Beverdammen, piekafvoerreductie tot 50%, waterretentie in droogte en stroomgebiedbeheer."},
+  6:{t:["13:39–13:54","16:08–16:24"],w:"De filterende werking van wetlands en buffering van water tijdens droogte."},
+  7:{t:["03:15–03:28","09:47–10:24","25:31–26:09"],w:"Rewilding, ecosysteemingenieurs, biodiversiteitsherstel, voedselwebben en klimaatveerkracht."},
+  8:{t:["11:41–12:26","17:42–20:36"],w:"Conflictbeheer: dammen verlagen, beverbedriegers plaatsen en belangen afwegen met de landbouw."},
+  9:{t:["08:32–08:47","26:47–27:14"],w:"Beleid rond herintroductie, proefprojecten, wettelijke bescherming en schadevergoeding."},
+  10:{t:["15:04–15:20"],w:"Opbouw van organisch materiaal en voedingsstoffen in bevermoerassen."}
+ },
+ top:[["05:15–06:20","Bouw en hydrologie van burcht en dam: hoe bevers waterpeilen kunstmatig verhogen."],
+      ["13:06–16:24","Hydroloog Alan Puttock: beverdammen verlagen piekafvoeren met 50% en bufferen droogte."],
+      ["17:42–20:36","Beverbeheer in de praktijk: dammen verlagen en flow devices installeren in overleg met boeren."],
+      ["21:13–22:40","Boerenperspectief: bevervijvers leveren beregeningswater én biodiversiteit."]]
+},
+{
+ id:"riversrisk", t:"Rivers at Risk – watercrisis op vier continenten (DW)", dur:90, ctx:"Mondiaal", verdict:5,
+ url:"https://www.youtube.com/watch?v=gzTxlQGbiyc",
+ why:"Breed, actueel en kritisch overzicht van de mondiale watercrisis. Brengt de relatie tussen landbouw, irrigatietechniek, waterkwaliteit en stroomgebiedbeheer in beeld. Toont zowel de schaduwzijden van technische ingrepen als duurzame oplossingen.",
+ s:{1:3,2:3,3:2,4:4,5:5,6:5,7:4,8:5,9:2,10:3},
+ k:{
+  1:{t:["10:50–12:37","21:31–22:39"],w:"Intensieve teelt van waterslurpende gewassen: alfalfa, aardappelen, aardbeien en rijst."},
+  2:{t:["50:00–52:06","1:26:40–1:28:40"],w:"Trekvispopulaties en de impact van stuwdammen op vismigratie."},
+  3:{t:["20:48–21:10","54:44–55:16"],w:"Hoe industriële landbouw de bodem tot cement verdicht en dammen de sedimentaanvoer verstoren."},
+  4:{t:["03:58–04:24","21:31–22:02"],w:"Bodemverzilting door betonkanalen en vloedberegening, plus herstel van bodemstructuur via wormen."},
+  5:{t:["03:14–04:24","08:38–10:42","45:26–47:00"],w:"Mondiale waterverdeling (70% landbouw), fossiele aquifers, rivieruitdroging en johads."},
+  6:{t:["19:30–19:50","59:34–1:03:33","1:05:52–1:06:15"],w:"Grondwaterverzilting, lozingen uit de textielindustrie en uitspoeling van stikstof en ammoniak."},
+  7:{t:["33:25–34:14","51:53–52:25"],w:"Afname van biodiversiteit in stroomgebieden, uitdrogende delta's en herstel na damverwijdering."},
+  8:{t:["24:52–26:02","45:26–47:44","52:45–54:18"],w:"Computergestuurde irrigatie, hergebruik van afvalwater, stroomgebiedbeheer en sloop van oude dammen."},
+  9:{t:["33:05–33:25","1:16:42–1:17:41"],w:"Internationale waterrechten, vergunningen, historische verdeelsleutels en wettelijke beperkingen."},
+  10:{t:["1:03:08–1:03:24","1:12:14–1:12:32"],w:"Ammoniakstikstof, nitraat in afvalwater en de kringloop van nutriëntenrijk visvijverwater."}
+ },
+ top:[["03:14–04:24","70% van al het water gaat naar landbouw, en betonkanalen blijken slecht voor grondwateraanvulling."],
+      ["10:50–12:30","De watervoetafdruk van voedergewassen en de impact van vloedberegening in droge gebieden."],
+      ["24:52–26:02","De paradox: efficiëntere irrigatie leidt vaak juist tot méér totaal waterverbruik."],
+      ["45:26–47:44","Rajendra Singh bouwt johads, aarden opvangdammen die aquifers herladen."],
+      ["52:45–54:18","Herstel van vismigratie en stroomgebiedsdynamiek door het verwijderen van stuwdammen."]]
+},
+{
+ id:"drinkingwater", t:"Our Drinking Water – Is the World Drying Up? (DW)", dur:42, ctx:"Mondiaal", verdict:5,
+ url:"https://www.youtube.com/watch?v=_t6sg2C-jqw",
+ why:"Uitstekend mondiaal perspectief op drinkwatervoorziening, hydrologische buffers en grondwaterbeheer. Verbindt klimaatverandering aan concrete vraagstukken: van kustverzilting en elektromagnetische kartering tot ruimte voor de rivier en eeuwenoude infiltratietechnieken.",
+ s:{1:1,2:1,3:3,4:3,5:5,6:5,7:3,8:5,9:2,10:0},
+ k:{
+  1:{t:["10:06–10:25"],w:"Korte vermelding van ooibossen langs de Rhône."},
+  2:{t:["10:06–10:25"],w:"Het ooibos als toevluchtsoord voor flora en fauna."},
+  3:{t:["14:59–16:36","34:06–35:12"],w:"Doorlatendheid van klei versus zand en grind, en breuklijnen in rotsgesteente."},
+  4:{t:["13:42–16:36","32:00–32:25"],w:"Indringing van zout water in kustaquifers en de impact van bodemverharding."},
+  5:{t:["01:21–02:36","06:58–07:22","10:45–11:20","33:48–36:15"],w:"Gletsjers als buffer, sponswerking van rivierbeddingen, aquiferherlading en zoet-zoutgrenzen."},
+  6:{t:["13:42–16:36","23:42–25:15","38:37–40:05"],w:"Verzilting van drinkwaterbronnen, omgekeerde osmose en zoetwatervoorraden voor de kust."},
+  7:{t:["07:54–08:12","09:59–10:40"],w:"De waarde van natuurlijke gletsjerlandschappen tegenover technische retentiebekkens."},
+  8:{t:["10:45–11:20","13:56–15:48","27:18–31:35","33:48–37:08"],w:"Elektromagnetische grondwaterkartering, historische regenwateropvang, stroomgebiedbeheer en infiltratiekanalen."},
+  9:{t:["08:12–08:26","40:26–41:12"],w:"Belangenafwegingen, kostendekkendheid van drinkwatervoorziening en klimaatveerkracht in de ruimtelijke ordening."},
+  10:{t:[],w:"Komt niet voor."}
+ },
+ top:[["01:21–02:36","De bufferfunctie van alpiene gletsjers voor Rijn, Rhône en Donau, en wat er gebeurt als die wegvalt."],
+      ["10:45–11:20","Uiterwaarden en natuurlijke rivierbeddingen herstellen zuivert water en herlaadt aquifers gratis."],
+      ["13:56–15:48","Elektromagnetische helikoptermetingen brengen zoet-zoutgrenzen ondergronds in kaart."],
+      ["23:42–25:15","Ontzilting via omgekeerde osmose op Malta: werking, energieverbruik en het probleem van pekel."],
+      ["33:48–37:08","Pre-Inca amunas in Peru: regenwater in rotsspleten leiden en acht maanden later oogsten als bronwater."]]
+},
+{
+ id:"watercrisis", t:"The Water Crisis (National Geographic)", dur:44, ctx:"VS", verdict:5,
+ url:"https://www.youtube.com/watch?v=3VyfN30XzDM",
+ why:"Heldere brug tussen macroniveau (aquifers, stuwmeren, kanaalsystemen) en microniveau (infiltratie in de tuin, irrigatie, gemeentelijke regels). Laat zien dat droogte niet alleen om minder verbruiken vraagt, maar om slim integraal waterbeheer.",
+ s:{1:3,2:3,3:2,4:3,5:5,6:4,7:4,8:5,9:3,10:2},
+ k:{
+  1:{t:["20:14–20:39","29:51–30:20","39:35–41:07"],w:"Droogteresistente beplanting, traditionele woestijngewassen en permacultuur."},
+  2:{t:["06:37–07:02","33:28–33:34"],w:"Bedreigde soorten in estuaria en faunaontwikkeling in gezuiverde moerasgebieden."},
+  3:{t:["19:41–20:07"],w:"Bodemerosie bij piekregens en infiltratie via compost, mulch en wadi's."},
+  4:{t:["24:01–24:16","29:34–29:45"],w:"Bodemdaling tot 60 cm per jaar door grondwateronttrekking, en laseregalisatie van percelen."},
+  5:{t:["14:12–14:44","20:46–21:15","28:12–28:42","34:31–35:10"],w:"Dalende stuwmeren, aquiferuitputting, kanaaltransport en kunstmatige grondwateraanvulling."},
+  6:{t:["08:07–08:35","33:17–34:31"],w:"Verzilting van estuaria en geavanceerde afvalwaterzuivering met hergebruik."},
+  7:{t:["06:23–08:41","33:17–33:34"],w:"Ecologische ineenstorting van de San Francisco Bay en de aanleg van zuiveringsmoerassen."},
+  8:{t:["15:59–17:21","29:21–29:45","35:42–37:15"],w:"Gazonverbod in Las Vegas, laser-geëgaliseerde precisie-irrigatie en regenwateropvang via wadi's."},
+  9:{t:["16:50–17:11","24:01–24:16"],w:"Gemeentelijke verordeningen voor watergebruik, pompbeperkingen en hergebruiknormen."},
+  10:{t:["26:10–26:42"],w:"De virtuele watervoetafdruk van veehouderij en voedergewassen."}
+ },
+ top:[["06:23–08:41","Bovenstrooms 50 tot 70% zoetwater aftappen verzilt de kraamkamer van de San Francisco Bay."],
+      ["14:12–14:49","De bathtub ring van Lake Mead: 36 meter daling en het risico van deadpool."],
+      ["15:59–17:21","Las Vegas bespaarde 33% water via bouwverordeningen, een gazonverbod en subsidie op grasverwijdering."],
+      ["28:42–29:45","Laseregalisatie en de overstap op droogteresistente graansoorten halveren de waterbehoefte."],
+      ["33:17–35:10","Tres Rios Wetlands: gezuiverd afvalwater nazuiveren in een moeras en de aquifer mee aanvullen."]]
+},
+{
+ id:"poisoned", t:"Poisoned Water – de watercrisis van Flint (NOVA)", dur:53, ctx:"VS", verdict:4,
+ url:"https://www.youtube.com/watch?v=akRz9XLJtmo",
+ why:"Indrukwekkende casus over de chemische, technische en bestuurlijke kant van drinkwaterbeheer. Laat haarscherp zien wat er gebeurt als corrosiebeheersing wordt verwaarloosd: zware metalen lossen op en bacteriële uitbraken volgen. Uitstekend voor drinkwaterkwaliteit, leidingnetwerken en bemonstering.",
+ s:{1:0,2:0,3:0,4:1,5:3,6:5,7:2,8:5,9:1,10:2},
+ k:{
+  1:{t:[],w:"Komt niet voor."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:[],w:"Komt niet voor."},
+  4:{t:["21:41–22:35"],w:"Kort over uitspoeling van zware metalen en corrosieproducten naar de ondergrond."},
+  5:{t:["02:04–02:57","16:31–17:07","50:22–51:13"],w:"Omschakelen van bron, distributienetwerken en vervanging van gietijzeren en loden leidingen."},
+  6:{t:["06:14–08:53","18:03–23:01","44:42–46:01"],w:"Zuiveringsstappen, corrosiebestrijding met orthofosfaat, looduitspoeling en legionella-uitbraken."},
+  7:{t:["08:17–08:53","44:42–46:01"],w:"Invloed van afvalwater uit industriële rivieren en bacteriegroei in leidingen."},
+  8:{t:["19:15–20:24","32:48–36:46","39:23–40:28"],w:"Monitoring, bemonsteringsprotocollen, distributienetbeheer en citizen science."},
+  9:{t:["12:06–12:39","19:15–20:24"],w:"Amerikaanse Lead and Copper Rule, maar illustreert het belang van wettelijke drinkwaternormen."},
+  10:{t:["19:59–20:24","48:02–48:14"],w:"Chemische dosering van orthofosfaat om corrosie in leidingen te voorkomen."}
+ },
+ top:[["06:14–08:53","Zuivering van oppervlaktewater: coagulatie, bezinking, zandfiltratie, koolfiltratie en desinfectie."],
+      ["18:03–23:01","De beschermende kalklaag in leidingen en wat er misgaat zonder corrosiebestrijding."],
+      ["32:48–36:46","Citizen science: bewoners nemen zelf watermonsters volgens wetenschappelijk protocol."],
+      ["39:23–40:28","Hoe verkeerde bemonstering (eerst doorspoelen) de meetresultaten vervalst."],
+      ["44:42–46:01","Gecorrodeerd ijzer verbruikt chloor, waarna legionella toeslaat."]]
+},
+{
+ id:"blueriver", t:"The Blue River", dur:27, ctx:"VS", verdict:4,
+ url:"https://www.youtube.com/watch?v=yTpRGTNAXU4",
+ why:"Leerzame en complete casus over integraal stroomgebiedbeheer. Maakt toegankelijk inzichtelijk hoe de bovenloop van een rivier verandert onder druk van stedelijke uitbreiding, met een goede balans tussen problemen en oplossingsrichtingen.",
+ s:{1:3,2:3,3:2,4:3,5:5,6:5,7:4,8:5,9:0,10:2},
+ k:{
+  1:{t:["08:09–08:25","15:50–16:00"],w:"Bos- en graslandvegetatie langs bronbeken en overlast van invasieve struiken."},
+  2:{t:["08:01–08:09","10:46–12:34"],w:"Inheemse vissoorten als bio-indicator en exotische karpers in stedelijke beken."},
+  3:{t:["08:58–09:20","21:18–21:26"],w:"Erosieprocessen langs oeverwallen en het effect van betonkanalisatie op de bodemstructuur."},
+  4:{t:["15:21–15:36","16:08–17:10"],w:"Bodemvervuiling met PCB's en het effect van illegale dumpingen op de oeverkwaliteit."},
+  5:{t:["03:08–03:40","08:33–09:20","21:03–21:47"],w:"Stroomgebiedsdynamiek, piekafvoer door verhard oppervlak, oevererosie en betonkanalisatie."},
+  6:{t:["08:01–08:09","15:21–15:44","16:56–17:18"],w:"Opgelost zuurstof als indicator, opwarming door verharding, PCB-verontreiniging en afvalwater."},
+  7:{t:["03:40–03:55","08:09–08:25","15:50–16:00"],w:"Ecologische verbindingen, stroomgebiedrelaties en de impact van exoten op bossen."},
+  8:{t:["13:41–14:31","18:25–19:15","21:56–22:42"],w:"Herinrichting van de rivier, opruimacties, recreatief trailbeheer en betonsanering."},
+  9:{t:[],w:"Komt niet voor. Amerikaanse stroomgebiedswetgeving."},
+  10:{t:["08:41–08:58"],w:"Afspoeling van afvalstoffen en opwarming van hemelwater op verharde oppervlakken."}
+ },
+ top:[["08:33–09:20","Verstedelijking leidt tot snellere piekstromen, minder infiltratie en oevererosie."],
+      ["15:21–15:44","Chemische verontreiniging met PCB's en de waarschuwingen voor recreatie."],
+      ["18:25–19:15","Vrijwilligersacties en community-based management bij afvalbeheer in stedelijke stroomgebieden."],
+      ["21:03–22:42","Van betonnen goot naar plannen voor ecologisch herstel van de natuurlijke bedding."]]
+},
+{
+ id:"wye", t:"What's Killing Our Rivers? (BBC)", dur:29, ctx:"Europa", verdict:5,
+ url:"https://www.youtube.com/watch?v=oHkE-B5Xhvc",
+ why:"Snijdt het mest- en fosfaatdossier aan, sterk vergelijkbaar met de Nederlandse stikstof- en KRW-discussie. Laat perfect zien hoe intensivering leidt tot fosfaatopbouw, afstroming en ecologische schade, én welke juridische en ruimtelijke gevolgen dat heeft voor gebiedsontwikkeling.",
+ s:{1:1,2:3,3:0,4:4,5:3,6:5,7:4,8:5,9:4,10:5},
+ k:{
+  1:{t:["02:21–02:46"],w:"Overmatige algengroei die andere waterplanten verstikt."},
+  2:{t:["05:53–06:14","09:54–10:11"],w:"Bedreiging van zalm, zeeforel en otter door zuurstofloosheid."},
+  3:{t:[],w:"Komt niet voor."},
+  4:{t:["08:39–09:41","23:46–23:51"],w:"Verzadiging van de bodem met fosfaat door overmatige mestgift, en legacy phosphorus."},
+  5:{t:["03:04–03:12","21:54–22:12"],w:"Afstroming van plattelandsgronden via duikers en greppels naar het oppervlaktewater."},
+  6:{t:["02:21–02:49","05:28–05:45","08:26–09:41"],w:"Eutrofiëring, te hoge fosfaatgehaltes, algenbloei en zuurstofschuld in het systeem."},
+  7:{t:["02:38–02:46","06:27–07:06","28:11–28:18"],w:"Instorten van rivierecosystemen door de cumulatieve druk van pluimveehouderij en overstorten."},
+  8:{t:["16:46–18:00","18:32–19:59","22:43–23:34"],w:"Handhaving, toezicht, inspectieprotocollen en het verschil tussen Schotse en Welshe regelgeving."},
+  9:{t:["10:53–13:27","25:29–26:50"],w:"Hoe strengere fosfaatnormen leidden tot een bouwstop voor woningbouw en gebiedsontwikkeling."},
+  10:{t:["02:30–03:12","08:26–09:41","20:46–21:22"],w:"Fosfaatoverschotten, vergisters, fosfaatbalansen per gewas en uitrijafstanden."}
+ },
+ top:[["02:21–03:12","De ketenreactie: fosfaatbelasting, algenbloei, zuurstofonttrekking, vissterfte."],
+      ["08:26–09:41","3000 ton fosfaatoverschot boven de gewasbehoefte, en de noodzaak van een uitrijstop."],
+      ["10:53–13:27","Strengere fosfaatnormen legden duizenden woningbouwprojecten stil."],
+      ["16:46–18:00","Schotland: gebiedsgerichte controles leidden tot 99% naleving van de milieuregels."],
+      ["20:46–22:37","Digestaat uitrijden op 2 meter van een sloot in plaats van de verplichte 6 meter."]]
+},
+{
+ id:"nile", t:"Egypt's Dam Problem – de geopolitiek van de Nijl", dur:17, ctx:"Mondiaal", verdict:5,
+ url:"https://www.youtube.com/watch?v=_BCY0SPOFpE",
+ why:"Briljante en toegankelijke analyse van grensoverschrijdend stroomgebiedbeheer, hydrologie en waterrecht. Laat zien dat water niet stopt bij landsgrenzen en dat ingrepen bovenstrooms directe gevolgen hebben benedenstrooms. De vergelijking met de Senegalrivier is didactisch ijzersterk.",
+ s:{1:1,2:0,3:2,4:2,5:5,6:2,7:1,8:5,9:5,10:2},
+ k:{
+  1:{t:["02:05–02:18"],w:"Korte vermelding van de historische landbouwproductiviteit op de overstromingsvlaktes."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:["02:05–02:18"],w:"Afzetting van slib en sediment tijdens seizoensgebonden overstromingen."},
+  4:{t:["02:05–02:18","13:44–13:50"],w:"Natuurlijke bemesting door rivierslib en het risico op verzilting in delta's."},
+  5:{t:["00:40–01:03","03:00–03:40","06:00–06:30","11:18–12:30"],w:"Witte en Blauwe Nijl, waterbeschikbaarheid per hoofd, het vullen van stuwmeren en debietregulatie."},
+  6:{t:["13:44–13:50"],w:"De grens tussen zoet en zout water bij kuststuwdammen."},
+  7:{t:["14:10–14:20"],w:"Korte vermelding van stroomgebiedbeheer en hydrologische balans."},
+  8:{t:["03:48–04:22","07:50–09:51","12:53–14:04"],w:"Stuwdammen, waterkracht, irrigatiesystemen en de vergelijking met het Senegal-rivierbeheer (OMVS)."},
+  9:{t:["04:22–05:39","11:53–12:43","14:26–15:10"],w:"Internationale waterverdragen, vetorechten, waterrechten en grensoverschrijdend beheer."},
+  10:{t:["02:05–02:18"],w:"Aanvoer van voedingselementen via sedimentatie."}
+ },
+ top:[["00:40–01:03","Het stroomgebied van de Nijl: 85% van het water komt uit de Ethiopische hooglanden."],
+      ["04:22–05:39","De waterverdragen van 1929 en 1959, en waarom die nu tot conflict leiden."],
+      ["07:50–09:51","De Grand Ethiopian Renaissance Dam: stroomproductie, reservoirinhoud en waterkracht."],
+      ["11:18–12:43","Het dilemma van de vulsnelheid: wat een mega-reservoir benedenstrooms betekent."],
+      ["12:53–14:04","De Senegalrivier: vier landen die samen één stroomgebied beheren."]]
+},
+{
+ id:"thaicave", t:"Thai Cave Rescue (NOVA)", dur:53, ctx:"Mondiaal", verdict:3,
+ url:"https://www.youtube.com/watch?v=05LHf5lzfXg",
+ why:"Primair een reddingsdocumentaire, maar waterbouwkundig zeer waardevol. Unieke en extreme casus over karsthydrologie, grondwaterstijging, piekafvoer tijdens de moesson en oppervlaktewaterbeheer. Het omleiden van water boven op de berg is een schoolvoorbeeld van creatief waterbeheer onder druk.",
+ s:{1:0,2:0,3:2,4:0,5:5,6:2,7:0,8:4,9:0,10:0},
+ k:{
+  1:{t:[],w:"Komt niet voor."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:["02:40–02:55","13:16–13:29"],w:"Karstverschijnselen, kalksteenstructuren, spleten en zinkgaten."},
+  4:{t:[],w:"Komt niet voor."},
+  5:{t:["05:23–05:53","11:02–11:21","17:19–19:15"],w:"Moessonneerslag, ondergrondse waterstromen, stijgend grondwater, pompen en het omleiden van afstromend water."},
+  6:{t:["09:47–09:53","11:51–12:03"],w:"Troebelheid van vloedwater en het gebrek aan veilig drinkwater ondergronds."},
+  7:{t:[],w:"Komt niet voor."},
+  8:{t:["17:19–19:15","35:39–36:18"],w:"Hydrologisch crisisbeheer, afvoersturing op berghellingen en het belang van neerslagvoorspelling."},
+  9:{t:[],w:"Komt niet voor."},
+  10:{t:[],w:"Komt niet voor."}
+ },
+ top:[["05:23–05:53","Karsthydrologie: hoe neerslag via ondergrondse rivieren een grottenstelsel onder water zet."],
+      ["11:02–11:21","De grenzen van pompcapaciteit bij extreem stijgend water."],
+      ["17:19–19:25","Oppervlaktewater bij zinkgaten afvangen en omleiden vermindert de instroom drastisch."],
+      ["35:39–36:18","Neerslagvoorspellingen als basis voor waterbouwkundige beslissingen onder tijdsdruk."]]
+},
+{
+ id:"floodcity", t:"What stops rain from flooding your city? (Andrew Lam)", dur:21, ctx:"Mondiaal", verdict:5,
+ url:"https://www.youtube.com/watch?v=coXe8_xnAOs",
+ why:"Een van de meest complete en visueel aantrekkelijke video's over stedelijk waterbeheer. Verbindt de historische ontwikkeling van watersystemen aan moderne hydraulische principes en behandelt daarna de volledige gereedschapskist: retentievijvers, infiltratie, wadi's, inundatiegebieden en sponssteden.",
+ s:{1:1,2:0,3:1,4:2,5:5,6:3,7:2,8:5,9:2,10:0},
+ k:{
+  1:{t:["19:13–19:43"],w:"Wadi's, regentuinen en beplanting ter bevordering van waterretentie."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:["00:57–01:15"],w:"Hoe verharding de natuurlijke bodemopname blokkeert."},
+  4:{t:["13:16–13:39","19:13–19:24"],w:"Infiltratie via ondergrondse kratten en de filterende werking van bodemlagen."},
+  5:{t:["02:48–05:28","09:20–10:08","10:46–14:00","18:03–18:47"],w:"Stroomsnelheid en de formule van Manning, eivormige riolen, retentiebekkens, noodoverlopen en ondergrondse berging."},
+  6:{t:["04:12–04:18","12:00–12:11","20:07–20:21"],w:"Scheiding van vuilwater en hemelwater, bezinking in retentievijvers en riooloverstorten."},
+  7:{t:["10:12–10:31","18:53–19:11"],w:"De ecologische schaduwzijde van kanaliseren tegenover groene parkstructuren."},
+  8:{t:["09:20–10:31","12:47–13:07","19:43–20:26"],w:"Grijs versus groen stedelijk waterbeheer, ruimtelijke ordening en nature-based solutions."},
+  9:{t:["10:12–10:31","13:40–13:45"],w:"Bouwrestricties in overstromingsgebieden en verplichte retentie op particulier terrein."},
+  10:{t:[],w:"Komt niet voor."}
+ },
+ top:[["02:48–05:28","Stroomsnelheid in riolen: eivormige profielen, zelfreinigende snelheid en de formule van Manning."],
+      ["09:20–10:31","Toronto na orkaan Hazel: stuwdammen en het uitkopen van bebouwing in het stroomgebied."],
+      ["10:46–14:00","Droge en natte retentievijvers, noodoverlopen, overland flow en infiltratiekratten."],
+      ["15:00–18:47","Tokio: sportvelden gecontroleerd laten onderlopen en gigantische ondergrondse bergingsbassins."],
+      ["19:13–20:45","Van dure grijze infrastructuur naar groenblauwe infrastructuur en sponssteden."]]
+},
+{
+ id:"sewers", t:"How Sewers Work (Practical Engineering)", dur:12, ctx:"VS", verdict:5,
+ url:"https://www.youtube.com/watch?v=UpHOkHxpTvQ",
+ why:"Kort, helder en visueel ijzersterk over rioleringstechniek en stedelijke hydraulica. Met opstellingen in zijn garage demonstreert Grady Hillhouse afschot, bezinking, zelfreinigende stroomsnelheid, vreemdwaterinloop en de werking van zinkers. Ideaal als compacte les stedelijk water.",
+ s:{1:0,2:0,3:0,4:1,5:5,6:3,7:1,8:5,9:2,10:0},
+ k:{
+  1:{t:[],w:"Komt niet voor."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:[],w:"Komt niet voor."},
+  4:{t:["06:18–07:04"],w:"Gronddekking, graafdiepte en sleufondersteuning bij aanleg van ondergrondse leidingen."},
+  5:{t:["02:44–03:30","03:38–05:37","07:15–08:35"],w:"Vreemd water (Inflow & Infiltration), afschot, stroomsnelheid, zelfreinigende snelheid en omgekeerde hevels."},
+  6:{t:["02:44–03:25","08:40–09:45"],w:"Riooloverstorten bij piekneerslag, bezinking en het oplosgedrag van wc-papier versus vochtige doekjes."},
+  7:{t:["03:16–03:25"],w:"Het risico van ongezuiverde overstort op het oppervlaktewater."},
+  8:{t:["01:05–02:20","04:23–05:37","07:15–08:35"],w:"Gedrag van vaste stoffen, verstoppingen voorkomen via hydraulisch ontwerp, zinkers en onderhoud."},
+  9:{t:["01:33–02:00","05:27–05:37"],w:"Gemeentelijke ontwerpeisen, capaciteitsberekening bij stedelijke groei en scheiding van stelsels."},
+  10:{t:[],w:"Komt niet voor."}
+ },
+ top:[["02:44–03:30","Vreemd water: hoe hemelwater via scheuren en putdeksels het vuilwaterstelsel binnendringt."],
+      ["03:38–05:37","Garagedemo: de invloed van afschot op stroomsnelheid en waarom bezinking optreedt."],
+      ["07:15–08:35","De werking van een zinker onder een waterloop, en waarom meerdere leidingen nodig zijn."],
+      ["08:40–09:54","Laboratoriumtest: wc-papier versus doorspoelbare doekjes, en hoe fatbergs ontstaan."]]
+},
+{
+ id:"stormwater", t:"Where Does Stormwater Go? (Practical Engineering)", dur:12, ctx:"VS", verdict:4,
+ url:"https://www.youtube.com/watch?v=wdcXmerZWDc",
+ why:"Compacte, technisch onderbouwde uitleg over stedelijk waterbeheer. Illustreert haarscherp de civieltechnische en hydrologische uitdagingen van verharding, afstroming, piekafvoer en rioolstelsels. De demonstratiemodellen en de introductie van Low Impact Development maken het een waardevol lesfragment.",
+ s:{1:2,2:1,3:0,4:2,5:5,6:4,7:3,8:5,9:0,10:0},
+ k:{
+  1:{t:["06:03–06:17","07:54–08:05"],w:"Vertragende werking van oevervegetatie en Low Impact Development met regentuinen en groene daken."},
+  2:{t:["06:23–06:28","07:26–07:30"],w:"Aantasting van aquatische leefgebieden door kanaalverharding en herstel van natuurlijke functies."},
+  3:{t:[],w:"Komt niet voor."},
+  4:{t:["01:42–02:18","07:06–07:12"],w:"Effect van verharding op infiltratie en sedimentbezinking in retentiebekkens."},
+  5:{t:["01:28–02:20","03:34–05:00","06:48–07:12"],w:"Stedelijke afstroming, piekafvoer, gescheiden rioolstelsels en retentie- en detentiebekkens."},
+  6:{t:["04:12–05:21","07:06–07:12"],w:"Riooloverstorten van gemengde stelsels, afspoeling van verontreiniging en bezinking in bufferbekkens."},
+  7:{t:["07:20–08:05"],w:"Het nabootsen van natuurlijke hydrologische functies binnen stedelijk gebied."},
+  8:{t:["02:48–03:08","05:52–06:37","07:48–08:26"],w:"Drainage-eisen bij bouwvergunningen, betonkanalen versus begroeide afvoeren en doorlatende verharding."},
+  9:{t:[],w:"Komt niet voor. Amerikaanse regelgeving."},
+  10:{t:[],w:"Komt niet voor."}
+ },
+ top:[["01:28–02:20","Het verschil in hydrologie tussen een natuurlijk sponslandschap en een stedelijke trechter."],
+      ["04:12–05:21","Waarom gemengde stelsels bij piekbuien overstorten en gescheiden stelsels dat voorkomen."],
+      ["05:52–06:37","Demonstratiemodel: betonneren verhoogt de afvoersnelheid maar verergert de overlast benedenstrooms."],
+      ["06:48–08:26","Retentiepijpen, Low Impact Development en waterdoorlatende verharding."]]
+},
+{
+ id:"singapore", t:"How Singapore's Urban Design Makes Way for Wildlife (WILD HOPE)", dur:14, ctx:"Mondiaal", verdict:3,
+ url:"https://www.youtube.com/watch?v=Jw1b_SviPyU",
+ why:"Inspirerende blik op stedelijke ecologie, groenblauwe structuren en ruimtelijke inrichting bij extreme grondschaarste. Boeiend voorbeeld van hoe stedenbouwkundig beheer en inheemse beplanting de biodiversiteit sterk vergroten. Technisch waterbeheer en bodemkunde ontbreken vrijwel.",
+ s:{1:3,2:4,3:0,4:0,5:1,6:1,7:4,8:5,9:0,10:0},
+ k:{
+  1:{t:["03:26–04:12","05:23–05:37"],w:"Verticale beplanting, selectie van inheemse flora en biomimicry naar bosklimplanten."},
+  2:{t:["05:47–06:36","12:13–12:20"],w:"Stijgende aantallen vlinder- en vogelsoorten, terugkeer van otters en samenleven met reptielen."},
+  3:{t:[],w:"Komt niet voor."},
+  4:{t:[],w:"Komt niet voor."},
+  5:{t:["05:54–05:57"],w:"Korte vermelding van visvijvers en otters in het stedelijk watersysteem."},
+  6:{t:["06:36–06:37"],w:"Vogels en libellen als bio-indicator voor de gezondheid van de leefomgeving."},
+  7:{t:["05:23–06:37","11:36–12:20"],w:"Stedelijke ecologie, biomimicry en biodiversiteitsindicatoren in dichtbebouwd gebied."},
+  8:{t:["03:26–04:12","07:20–07:37","13:34–13:59"],w:"Stedelijke groenarchitectuur, natuur integreren in bouwlocaties en inrichting bij grondschaarste."},
+  9:{t:[],w:"Komt niet voor. Singaporees stedenbouwkundig beleid."},
+  10:{t:[],w:"Komt niet voor."}
+ },
+ top:[["03:26–04:12","Verticaal groen en biomimicry integreren in de gebouwde omgeving."],
+      ["05:23–06:37","Van 3 naar 114 vlindersoorten door inheemse beplanting in de stad."],
+      ["06:49–07:20","De zachte functies van groen: helende omgevingen bij ziekenhuizen."],
+      ["11:36–12:20","Groene corridors aanleggen tussen woonflats en drukke wegen."]]
+},
+{
+ id:"droughts", t:"Do Droughts Make Floods Worse? (Practical Engineering)", dur:16, ctx:"VS", verdict:4,
+ url:"https://www.youtube.com/watch?v=DARUvKPSUhE",
+ why:"Wetenschappelijk onderbouwde verdieping op het snijvlak van bodemkunde en hydrologie. Ontrafelt het misverstand dat droge grond altijd minder water opneemt. Met aanschouwelijke proeven, de infiltratiecurve van Horton en het fenomeen hydrofobie levert dit uitstekend lesmateriaal over infiltratie en afstroming.",
+ s:{1:2,2:0,3:1,4:4,5:5,6:0,7:2,8:4,9:0,10:0},
+ k:{
+  1:{t:["10:48–11:00","12:42–13:08"],w:"Invloed van wortelexcreties en het verlies van begroeiing na bosbranden."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:["04:15–04:26"],w:"Hoe de korrelopbouw van zand, silt en klei de poreusheid bepaalt."},
+  4:{t:["07:10–09:44","10:37–11:43"],w:"Bodemvochtigheid, verzadiging, poreusheid en het verschijnsel hydrofobe bodems."},
+  5:{t:["02:46–03:32","04:35–06:35","09:44–10:29"],w:"Infiltratiesnelheid volgens Horton, de SCS Curve Number-methode, runoff en beginomstandigheden."},
+  6:{t:[],w:"Komt niet voor."},
+  7:{t:["10:48–11:00","12:42–13:08"],w:"De impact van bosbranden op bodemeigenschappen en het risico op erosie en modderstromen."},
+  8:{t:["01:57–02:46","05:50–06:51"],w:"Hoe waterbeheer hydrologische modellen en ontwerpbuien gebruikt voor waterinfrastructuur."},
+  9:{t:[],w:"Komt niet voor. Amerikaanse rekenmodellen."},
+  10:{t:[],w:"Komt niet voor."}
+ },
+ top:[["04:35–06:35","De infiltratievergelijking van Horton en afstroming berekenen met de SCS Curve Number-methode."],
+      ["07:10–08:07","Infiltrometer in het veld: de afnemende infiltratiesnelheid van verzadigde kleigrond."],
+      ["09:22–09:44","Proef met een doorzichtige buis: hoe beginvochtigheid de opnamesnelheid beïnvloedt."],
+      ["10:37–12:00","Hydrofobie: waarom extreem droge grond water afstoot."]]
+},
+{
+ id:"nycwater", t:"How New York City Gets Its Water (Wendover Productions)", dur:16, ctx:"VS", verdict:5,
+ url:"https://www.youtube.com/watch?v=IDLkOWW0_xg",
+ why:"Fascinerend kijkje in een van de meest complexe publieke infrastructuurnetwerken ter wereld. Verbindt stroomgebiedbeheer op afstand (natuurlijke opvanggebieden beschermen om dure filtratie te voorkomen) aan praktische hydraulica (zwaartekrachtleidingen en hevelwerking) en drinkwaterhygiëne (UV-desinfectie, monitoring, troebelheid). Inhoudelijk ijzersterk voor waterbeheer en drinkwatervoorziening.",
+ s:{1:1,2:0,3:1,4:2,5:5,6:5,7:2,8:5,9:4,10:1},
+ k:{
+  1:{t:["03:45–03:52"],w:"Korte vermelding van de bosbedekking rond de spaarbekkens als natuurlijke filterlaag."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:["08:45–08:52"],w:"Rots- en beddingstructuren onder de Hudson bij de tunnelbouw."},
+  4:{t:["01:53–02:15","05:27–05:35"],w:"Historische verontreiniging van grondwater en afspoeling vanuit de landbouw in het stroomgebied."},
+  5:{t:["00:15–00:50","03:13–03:26","08:10–09:05"],w:"Estuariumhydrologie en de zoutgrens, spaarbekkencapaciteit, hevelwerking en drukstroming."},
+  6:{t:["04:02–04:13","10:34–11:38","11:49–12:05"],w:"Ongefilterd drinkwater, chloor- en UV-desinfectie, troebelheid, orthofosfaat en fluoride, en de Croton-filtratie."},
+  7:{t:["03:45–03:52"],w:"Het belang van natuurlijke stroomgebiedsbescherming tegen verontreiniging door de mens."},
+  8:{t:["04:36–05:55","06:34–08:05","12:45–14:23"],w:"Handhaving met eigen politie, leidingnetbeheer, onderhoud aan tunnels en aquaducten, en monitoring."},
+  9:{t:["04:20–05:01"],w:"Clean Water Act, EPA-normen, ruimtelijkeordeningsbevoegdheid in opvanggebieden en vergunningen."},
+  10:{t:["05:27–05:35"],w:"Korte vermelding van landbouwverontreiniging en afspoeling in beken."}
+ },
+ top:[["00:15–00:50","Waarom een stad omringd door water toch zoetwatertekort heeft: getijdenestuaria en zoet-zoutgrenzen."],
+      ["03:45–05:55","Het grootste ongefilterde drinkwatersysteem ter wereld: landgebruik sturen in een stroomgebied 160 km verderop."],
+      ["08:10–09:05","Het Delaware-aquaduct als één gigantische zinker: 137 km zonder pompen, op verval en hevelwerking."],
+      ["10:34–12:05","Zuivering in stappen: chloor, fluoride en orthofosfaat, noodvlokking met aluin, en UV-desinfectie op recordschaal."]]
+},
+{
+ id:"poldermolens", t:"De geschiedenis van de polder, klink en poldermolens", dur:17, ctx:"Nederland", verdict:5,
+ url:"https://www.youtube.com/watch?v=KI7zkjjp_ZY",
+ why:"Haarscherp, historisch en fysisch onderbouwd overzicht van het ontstaan van het Nederlandse polderlandschap, het fenomeen veenklink en de evolutie van de bemaling. Maakt inzichtelijk hoe bodemdaling door ontwatering leidde tot de noodzaak van kunstmatige bemaling: van duiker tot poldermolen tot meertraps boezembemaling. Onmisbaar fundament voor hydrologie, polderbeheer en cultuurtechniek.",
+ s:{1:0,2:0,3:3,4:4,5:5,6:2,7:1,8:5,9:4,10:1},
+ k:{
+  1:{t:[],w:"Komt niet voor."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:["03:59–04:41","13:31–13:55"],w:"Opbouw van het Hollandse veenpakket, erosie door golfslag en het ontstaan van grote meren, de Waterwolf."},
+  4:{t:["04:18–05:08","07:30–07:53"],w:"Klink en bodemdaling door oxidatie van drooggelegd veen: krimp en het verbranden van veen, zo'n halve meter per eeuw."},
+  5:{t:["00:46–01:18","02:47–03:36","06:05–06:27","11:44–12:32"],w:"Getrapte bemaling via een molenviergang, natuurlijk spuien via duikers met klepdeksels, verval en boezemsystemen."},
+  6:{t:["09:51–10:22"],w:"Het mengen van zout zeewater en zoet rivierwater bij historische dijkdoorbraken."},
+  7:{t:["10:22–10:31"],w:"Het ontstaan van de Biesbosch na de Sint-Elisabethsvloed."},
+  8:{t:["02:00–03:36","05:41–06:20","12:32–13:09","16:09–16:42"],w:"Uitvinding van de poldermolen in 1407, schepraderen, wipmolens op slappe grond en meertraps droogmakerijen."},
+  9:{t:["01:18–01:34","06:27–06:44","12:32–12:54"],w:"Het ontstaan van de vroegste polderbesturen en waterschappen, middeleeuwse ontginningsovereenkomsten en heemraadschappen."},
+  10:{t:["00:31–00:39"],w:"Korte vermelding van vruchtbare mariene kweldergronden voor de vroege akkerbouw."}
+ },
+ top:[["00:46–01:18","De oudste houten duiker met klepdeksel uit de Maasdelta: passieve afwatering bij eb, kering bij vloed."],
+      ["02:47–03:36","Getrapte bemaling in beeld: hoe een molenviergang water stap voor stap omhoog brengt, 40 tot 45 m³ per minuut."],
+      ["03:59–05:08","Veenoxidatie en klink: waarom polders een halve meter per eeuw zakken en het maaiveld in 1500 jaar 5 meter daalde."],
+      ["05:41–06:20","De uitvinding van de poldermolen in 1407: van vrij verval naar mechanische bemaling."],
+      ["11:44–12:32","Hoge en lage boezem bij Kinderdijk: waarom inklinkend land een tweede trap molens nodig had."],
+      ["14:27–16:42","Het droogmalen van Beemster, Schermer en Purmer, en hoe molens meeverhuisden naarmate het meer dieper werd."]]
+},
+{
+ id:"salt", t:"Salt of the Earth – bodemverzilting in de Upper Great Plains", dur:27, ctx:"VS", verdict:5,
+ url:"https://www.youtube.com/watch?v=SYDme3KgO6g",
+ why:"Inhoudelijk hoogwaardige en zeer relevante les over bodemverzilting, hydrogeologie, osmotische spanning en drainagetechniek. Legt feilloos uit hoe bodemeigenschappen als zoutgehalte, capillaire werking en natriumgehalte de gewasopbrengst be\u00efnvloeden, en hoe civieltechnische ingrepen (buisdrainage) en biologische ingrepen (diepwortelende groenbemesters, no-till) verzilting kunnen bestrijden.",
+ s:{1:3,2:0,3:4,4:5,5:5,6:4,7:2,8:5,9:3,10:3},
+ k:{
+  1:{t:["10:23\u201310:30","11:44\u201311:56","15:52\u201316:26"],w:"Zouttolerante gewassen zoals luzerne, gerst, wintergraan en tall wheatgrass tegenover zoutgevoelige gewassen als ma\u00efs en soja."},
+  2:{t:[],w:"Komt niet voor."},
+  3:{t:["03:32\u201303:55","05:00\u201305:12"],w:"Verwering van jonge glaciale bodems en het vermalen van schaliepakketten als geologische bron van de zouten."},
+  4:{t:["01:22\u201301:38","05:56\u201306:17","08:17\u201308:32","17:03\u201317:45"],w:"Bodemverzilting, geleidbaarheid (EC), witte uitbloei en korstvorming, osmotische stress en structuurbederf door natrium."},
+  5:{t:["02:25\u201302:40","05:26\u201305:54","11:44\u201311:56","19:14\u201320:37"],w:"Stijgende grondwaterstanden, capillaire opstijging, verdamping, buisdrainage en het verlagen van de grondwaterstand."},
+  6:{t:["08:32\u201309:20","23:32\u201324:28"],w:"Afvoer van zout drainagewater, sulfaatgehaltes, nitraatuitspoeling en het risico dat je het probleem verplaatst."},
+  7:{t:["02:42\u201303:27"],w:"Historische context: verwoestijning en het instorten van landbouwsystemen door verzilting, tot Mesopotami\u00eb aan toe."},
+  8:{t:["10:01\u201310:53","11:44\u201312:41","13:46\u201314:42","19:14\u201322:40"],w:"Precisielandbouw met plaatsspecifieke bemesting, niet-kerende grondbewerking, groenbemesters en ondergrondse buisdrainage."},
+  9:{t:["04:56\u201305:00","12:14\u201312:24","20:45\u201320:57"],w:"Subsidie- en beschermingsprogramma\u2019s voor landbouwgrond en vergunningverlening voor drainage-uitstroom."},
+  10:{t:["10:46\u201310:53","13:50\u201314:24","24:21\u201324:28"],w:"Effici\u00ebnte mestdosering op zoute gronden en de uitspoeling van stikstof via drainagestelsels."}
+ },
+ top:[["02:42\u201303:31","Hoe natte klimaatcycli en stijgende grondwaterstanden zouten via capillaire werking naar de wortelzone brengen."],
+      ["08:17\u201308:32","Osmotische druk in het klein: waarom een gewas bij hoge zoutconcentratie geen water meer kan opnemen."],
+      ["11:44\u201312:41","Waarom kerende grondbewerking de verdamping en zoutophoping juist verergert, en wat diepwortelaars en strobedekking doen."],
+      ["13:46\u201314:42","Zonebeheer en ECa-kartering: op basis van zoutkaarten de mestgift uitzetten op de witte vlekken."],
+      ["19:14\u201320:37","Voor- en nadelen van buisdrainage, inclusief het milieurisico van zout en nitraatrijk water benedenstrooms."]]
+},
+{
+ id:"elixir", t:"Unique Earth: The Essence of Water", dur:52, ctx:"Mondiaal", verdict:4,
+ url:"https://www.youtube.com/watch?v=K6Qh4xBxUy8",
+ why:"Duikt diep in de natuurkundige, chemische en biologische eigenschappen van water. Uitstekende verdieping van basisconcepten: dichtheidsverschillen tussen zoet en zout, de dichtheidsanomalie van ijs, watertransport in bomen, en de werking van gletsjers en wolken.",
+ s:{1:3,2:4,3:3,4:2,5:5,6:5,7:4,8:3,9:0,10:3},
+ k:{
+  1:{t:["29:29–31:05"],w:"Hoe bomen water en voeding opzuigen via capillaire werking en verdampingszuigkracht."},
+  2:{t:["07:44–08:57","18:29–23:12","36:44–37:00"],w:"Oerkreeftjes in grotten, communicatie van bultruggen en zeehonden onder het ijs van het Baikalmeer."},
+  3:{t:["04:52–06:20","10:07–11:06"],w:"Karstverschijnselen, kalksteenerosie door regenwater en oceaanbodemvorming."},
+  4:{t:["06:20–06:45","39:16–41:00"],w:"Giftig waterstofsulfide in grotten en extreme chemische condities diep ondergronds."},
+  5:{t:["05:37–06:45","23:55–25:00","31:15–34:54","43:43–50:00"],w:"Halocline, thermohaline circulatie, wolkendynamiek en gletsjerdynamiek met smeltwater als smeermiddel."},
+  6:{t:["04:26–04:41","06:37–07:32","36:11–36:39"],w:"Zuurstofarm water, osmotische druk op visfysiologie en de dichtheidsanomalie van ijs."},
+  7:{t:["07:44–08:06","11:35–12:32","28:55–29:14"],w:"Extreme ecosystemen bij hydrothermale bronnen, mariene voedselwebben en het ontstaan van de eerste cel."},
+  8:{t:["24:47–28:47","34:54–35:30"],w:"Karteringstechnieken met luchtschepen en sensoren, en ethiek rond weerbeïnvloeding."},
+  9:{t:[],w:"Komt niet voor."},
+  10:{t:["23:55–24:30","28:55–29:14"],w:"Upwelling van voedingsstoffen door oceanische wervels en mineralenopname door boomwortels."}
+ },
+ top:[["05:37–07:32","Wat is een halocline? Zoetwater dat op zoutwater drijft, en wat dat betekent voor vissen."],
+      ["23:55–25:00","De global conveyor belt en onderzoek naar wervels die nutriënten omhoog pompen."],
+      ["29:29–31:05","Hoe transporteren bomen water tot 40 meter hoogte? Worteldruk, capillariteit en zuigkracht."],
+      ["31:15–34:54","Hoe ontstaat neerslag? Laseronderzoek op de Zugspitze naar botsende microdruppels."],
+      ["43:43–50:00","Afdaling in een gletsjer: smeltwater via moulins werkt als smeermiddel onder het ijs."]]
+}
+];
+
+const UNRATED = [
+ {t:"NPO Doc – De MOB Methode", url:"https://npo.nl/start/afspelen/npo-doc-de-mob-methode", note:"Nederlandse casus. Geen tijdcodes beschikbaar; NPO Start vraagt om inloggen."}
+];
+
+</script>
+<script>
+const INFO=`<div class="uitleg">
+<h2>Deze beeldbank is van jou</h2>
+<p class="lead">Kennis op Peil is niet alleen een docentending. Hij is gemaakt zodat je er zelf mee aan de slag kunt: zoeken, kijken, en ontdekken waar jouw vak over gaat.</p>
+
+<h3>Hoe je hem gebruikt</h3>
+<p>Kies links een onderwerp. Je krijgt dan alle fragmenten die daarover gaan, uit alle films in de bank. Klik op een tijdcode en de film start precies op dat moment — je hoeft dus niet te zoeken of door te spoelen.</p>
+<ol>
+<li>Heb je vijf minuten? Filter op korte films en pak een fragment.</li>
+<li>Wil je je ergens in verdiepen? Zet het filter uit en kijk de hele film.</li>
+<li>Zoek je iets specifieks? Typ een woord in het zoekveld, bijvoorbeeld <em>kwel</em>, <em>overstort</em> of <em>bever</em>.</li>
+</ol>
+<p>De oranje gemarkeerde fragmenten zijn de aanraders: als je maar één stuk uit een film bekijkt, neem dan die.</p>
+
+<div class="kader">
+<h3>Doe het ook gewoon omdat het leuk is</h3>
+<p>Je hoeft hier geen opdracht voor te hebben. Als je nieuwsgierig bent naar hoe een riool werkt, waarom een polder zakt of hoe bevers een rivier veranderen: kijken mag. Er zit werk in dit vak dat je nergens anders tegenkomt, en deze films laten dat zien. Geniet er vooral van.</p>
+</div>
+
+<h3>Waarom deze tien onderwerpen?</h3>
+<p>De onderwerpen 6.1 tot en met 6.10 zijn geen willekeurige indeling. Ze sluiten aan op de kennisleerlijn en daarmee op het kennisexamen van het kwalificatiedossier <b>25617 Opzichter/Uitvoerder Groene Ruimte</b> (context natuur, water en recreatie). Wat je hier ziet, is dus ook de stof die je uiteindelijk moet beheersen.</p>
+<ul class="themalijst">
+<li><b>6.1</b> Flora</li><li><b>6.2</b> Fauna</li><li><b>6.3</b> Bodemvorming</li>
+<li><b>6.4</b> Bodemkwaliteit</li><li><b>6.5</b> Waterhuishouding</li><li><b>6.6</b> Waterkwaliteit</li>
+<li><b>6.7</b> Ecologie</li><li><b>6.8</b> Beheer</li><li><b>6.9</b> Omgevingswet</li><li><b>6.10</b> Nutriënten</li>
+</ul>
+<p>Het balkje achter een fragment geeft aan hoe stevig een film dat onderwerp behandelt. Vijf balken bij waterhuishouding betekent: hier valt echt iets te halen. Een gestreept balkje betekent dat het onderwerp in die film niet voorkomt.</p>
+
+<div class="kader let">
+<h3>Let op: soortenkennis leer je hier niet</h3>
+<p>Voor je examen moet je ook planten en dieren kunnen herkennen. Daar helpen deze documentaires maar beperkt bij. Je ziet er soorten in voorbijkomen, en dat geeft je gevoel voor waar iets groeit en waarom, maar herkennen leer je alleen door te oefenen: in het veld, met de plantenkenniskaart, met flashcards en door zelf te blijven kijken.</p>
+<p>Gebruik deze bank dus voor begrip en context. Voor soortenkennis heb je je laarzen nodig.</p>
+</div>
+
+<p class="slot">Veel kijkplezier.</p>
+</div>`;
+
+const DURS=[["kort","In de les (≤ 20 min)",d=>d<=20],["mid","Lesuur (20–60 min)",d=>d>20&&d<=60],["lang","Volledige film (60+ min)",d=>d>60]];
+const CTXS=["Nederland","Europa","VS","Mondiaal"];
+const st={view:"frag",themes:new Set(),dur:new Set(),ctx:new Set(),q:""};
+
+/* -- tijdcode -> seconden -- */
+function secs(tc){
+  const start=String(tc).split(/[–—-]/)[0].trim();
+  const p=start.split(":").map(n=>parseInt(n,10)||0);
+  return p.length===3?p[0]*3600+p[1]*60+p[2]:p[0]*60+p[1];
+}
+function deep(url,tc){
+  if(!url) return null;
+  const base=url.split("&t=")[0].split("?t=")[0];
+  return base+(base.includes("?")?"&":"?")+"t="+secs(tc)+"s";
+}
+function gauge(n,hi){
+  let h='<span class="gauge'+(n>=4?" hi":"")+(n===0?" nil":"")+'" role="img" aria-label="'+(n||0)+' van 5">';
+  for(let i=1;i<=5;i++)h+='<i class="'+(i<=n?"on":"")+'"></i>';
+  return h+"</span>";
+}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+
+/* -- fragmentenbank opbouwen -- */
+const BANK=[];
+DOCS.forEach(d=>{
+  const tops=(d.top||[]).map(x=>secs(x[0]));
+  for(let n=1;n<=10;n++){
+    const k=d.k[n]; if(!k||!k.t.length) continue;
+    k.t.forEach(tc=>{
+      BANK.push({doc:d,theme:n,tc,w:k.w,score:d.s[n],star:tops.includes(secs(tc))});
+    });
+  }
+});
+
+/* -- filters -- */
+function matchDoc(d){
+  if(st.dur.size&&![...st.dur].some(id=>DURS.find(x=>x[0]===id)[2](d.dur)))return false;
+  if(st.ctx.size&&!st.ctx.has(d.ctx))return false;
+  return true;
+}
+function matchQ(txt){return !st.q||txt.toLowerCase().includes(st.q)}
+function fragments(){
+  return BANK.filter(f=>
+    (!st.themes.size||st.themes.has(f.theme))&&matchDoc(f.doc)&&
+    matchQ(f.w+" "+f.doc.t+" "+THEMES[f.theme])
+  );
+}
+function docs(){
+  return DOCS.filter(d=>
+    matchDoc(d)&&
+    (!st.themes.size||[...st.themes].every(n=>d.s[n]>0))&&
+    matchQ(d.t+" "+d.why+" "+Object.values(d.k).map(k=>k.w).join(" "))
+  );
+}
+
+/* -- rail -- */
+function drawRail(){
+  const counts={};BANK.forEach(f=>counts[f.theme]=(counts[f.theme]||0)+1);
+  themesEl.innerHTML=Object.entries(THEMES).map(([n,nm])=>
+    '<button class="thm" data-t="'+n+'" aria-pressed="'+st.themes.has(+n)+'">'+
+    '<span class="no mono">6.'+n+'</span><span class="nm">'+nm+'</span>'+
+    '<span class="ct mono">'+(counts[n]||0)+'</span></button>').join("");
+  dursEl.innerHTML=DURS.map(d=>'<button class="chip" data-d="'+d[0]+'" aria-pressed="'+st.dur.has(d[0])+'">'+d[1]+'</button>').join("");
+  ctxsEl.innerHTML=CTXS.map(c=>'<button class="chip" data-c="'+c+'" aria-pressed="'+st.ctx.has(c)+'">'+c+'</button>').join("");
+}
+
+/* -- weergave -- */
+function render(){
+  drawRail();
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.view===st.view));
+  document.querySelector(".shell").classList.toggle("wide",st.view==="info");
+  if(st.view==="frag"){
+    const list=fragments();
+    countEl.textContent=list.length+" fragmenten uit "+new Set(list.map(f=>f.doc.id)).size+" films";
+    const by={};list.forEach(f=>(by[f.theme]=by[f.theme]||[]).push(f));
+    const order=Object.keys(by).sort((a,b)=>a-b);
+    viewEl.innerHTML=order.length?order.map(n=>{
+      const rows=by[n].sort((a,b)=>b.score-a.score||(b.star-a.star));
+      return '<section class="group"><div class="ghead"><span class="gno">6.'+n+'</span><h2>'+THEMES[n]+
+      '</h2><span class="gct">'+rows.length+' fragmenten</span></div>'+
+      rows.map(f=>{
+        const l=deep(f.doc.url,f.tc);
+        return '<article class="frag'+(f.star?" star":"")+'">'+
+          '<div class="tc">'+(l?'<a href="'+l+'" target="_blank" rel="noopener">'+f.tc+'</a>':f.tc)+
+          '<small>'+(l?"start hier":"link ontbreekt")+'</small></div>'+
+          '<div class="body"><p>'+esc(f.w)+'</p><div class="src">'+
+          '<button data-open="'+f.doc.id+'"><b>'+esc(f.doc.t)+'</b></button> · '+f.doc.dur+' min · '+f.doc.ctx+
+          ' · dekking '+gauge(f.score)+'</div></div>'+
+          (f.star?'<div class="star-tag">aanrader</div>':'<div></div>')+
+        '</article>';
+      }).join("")+'</section>';
+    }).join(""):'<div class="empty">Geen fragmenten met deze filters. Zet een filter uit of zoek op een ander woord.</div>';
+  }else if(st.view==="info"){
+    countEl.textContent="";
+    viewEl.innerHTML=INFO;
+  }else{
+    const list=docs();
+    countEl.textContent=list.length+" films";
+    viewEl.innerHTML='<div class="docs">'+list.map(d=>{
+      const mx=Math.max(...Object.values(d.s));
+      return '<button class="card" data-open="'+d.id+'">'+
+        '<div class="meta">'+d.dur+' min · '+d.ctx+(d.nolink?' · link ontbreekt':'')+'</div>'+
+        '<h3>'+esc(d.t)+'</h3>'+
+        '<div class="profile" title="dekking 6.1 t/m 6.10">'+[1,2,3,4,5,6,7,8,9,10].map(n=>
+          '<span class="'+(d.s[n]===0?"z":(d.s[n]===mx?"top":""))+'" style="height:'+(d.s[n]?d.s[n]/5*100:4)+'%"></span>').join("")+'</div>'+
+        '<div class="verdict">Geschiktheid '+gauge(d.verdict,1)+'</div></button>';
+    }).join("")+'</div>'+
+    '<h4 style="margin-top:44px">Wel een link, nog geen beoordeling</h4>'+
+    '<div class="docs">'+UNRATED.map(u=>
+      '<a class="card" href="'+u.url+'" target="_blank" rel="noopener" style="text-decoration:none">'+
+      '<div class="meta">nog te bekijken</div><h3>'+esc(u.t)+'</h3>'+
+      '<div class="verdict">'+esc(u.note)+'</div></a>').join("")+'</div>';
+  }
+}
+
+/* -- placemat -- */
+function open(id){
+  const d=DOCS.find(x=>x.id===id);if(!d)return;
+  const rows=[1,2,3,4,5,6,7,8,9,10].map(n=>{
+    const k=d.k[n],on=d.s[n]>0;
+    return '<tr class="'+(on?"":"off")+'"><td>6.'+n+' '+THEMES[n]+'<br>'+gauge(d.s[n])+'</td>'+
+    '<td>'+esc(k.w)+(k.t.length?'<span class="tcs">'+k.t.map(tc=>{
+      const l=deep(d.url,tc);return l?'<a href="'+l+'" target="_blank" rel="noopener">'+tc+'</a>':tc;
+    }).join(" · ")+'</span>':'')+'</td></tr>';
+  }).join("");
+  sheetEl.innerHTML='<div class="top"><h2>'+esc(d.t)+'</h2>'+
+    '<div class="meta">'+d.dur+' minuten · '+d.ctx+' · geschiktheid '+d.verdict+'/5</div>'+
+    '<button class="close" aria-label="Sluiten">×</button></div>'+
+    '<div class="in">'+
+    (d.url?'<a class="watch" href="'+d.url+'" target="_blank" rel="noopener">Bekijk de film ↗</a>':
+      '<div class="note">Deze film staat nog niet in de linklijst. Voeg de YouTube-link toe en de tijdcodes worden vanzelf klikbaar.</div>')+
+    (d.linkcheck?'<div class="note">Controleer de link: in de aangeleverde lijst stond bij deze titel dezelfde URL als bij een andere film.</div>':'')+
+    (d.flag?'<div class="note">'+esc(d.flag)+'</div>':'')+
+    '<h4>Aanbevolen fragmenten</h4>'+
+    (d.top||[]).map(t=>{const l=deep(d.url,t[0]);
+      return '<article class="frag star"><div class="tc">'+(l?'<a href="'+l+'" target="_blank" rel="noopener">'+t[0]+'</a>':t[0])+
+      '</div><div class="body"><p>'+esc(t[1])+'</p></div><div></div></article>';}).join("")+
+    '<h4>Wat komt waar aan bod</h4><table>'+rows+'</table>'+
+    '<h4>Geschiktheid voor de opleiding</h4><div class="motiv">'+esc(d.why)+'</div>'+
+    '</div>';
+  ovEl.classList.add("open");document.body.style.overflow="hidden";
+  sheetEl.querySelector(".close").focus();
+}
+function shut(){ovEl.classList.remove("open");document.body.style.overflow=""}
+
+/* -- events -- */
+const themesEl=document.getElementById("themes"),dursEl=document.getElementById("durs"),
+      ctxsEl=document.getElementById("ctxs"),viewEl=document.getElementById("view"),
+      countEl=document.getElementById("count"),ovEl=document.getElementById("ov"),
+      sheetEl=document.getElementById("sheet");
+function tog(set,v){set.has(v)?set.delete(v):set.add(v);render()}
+themesEl.onclick=e=>{const b=e.target.closest(".thm");if(b)tog(st.themes,+b.dataset.t)};
+dursEl.onclick=e=>{const b=e.target.closest(".chip");if(b)tog(st.dur,b.dataset.d)};
+ctxsEl.onclick=e=>{const b=e.target.closest(".chip");if(b)tog(st.ctx,b.dataset.c)};
+document.getElementById("q").oninput=e=>{st.q=e.target.value.trim().toLowerCase();render()};
+document.getElementById("reset").onclick=()=>{st.themes.clear();st.dur.clear();st.ctx.clear();st.q="";document.getElementById("q").value="";render()};
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{st.view=t.dataset.view;render();window.scrollTo({top:0})});
+viewEl.onclick=e=>{const b=e.target.closest("[data-open]");if(b){e.preventDefault();open(b.dataset.open)}};
+ovEl.onclick=e=>{if(e.target===ovEl||e.target.closest(".close"))shut()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")shut()});
+render();
+</script>
+</body>
+</html>
